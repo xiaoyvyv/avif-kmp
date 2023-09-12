@@ -20,6 +20,10 @@ actual class AvifDecoder private constructor(
         external fun createContext(bytes: ByteArray, length: Int): Long
     }
 
+    actual fun nextImage(): Boolean {
+        return nextImage(context)
+    }
+
     actual fun getImageCount(): Int {
         return context.toInt()
     }
@@ -50,8 +54,8 @@ actual class AvifDecoder private constructor(
         }
     }
 
-    // private external fun nextImage(context: Long): Boolean
-    // private external fun getImageCount(context: Long): Int
+    private external fun nextImage(context: Long): Boolean
+    private external fun getImageCount(context: Long): Int
     private external fun getImageWidth(context: Long): Int
     private external fun getImageHeight(context: Long): Int
     private external fun getFrame(context: Long, bitmap: Any): Int

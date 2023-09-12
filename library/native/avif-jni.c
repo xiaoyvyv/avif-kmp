@@ -35,6 +35,18 @@ Java_com_seiko_avif_AvifDecoder_destroyContext(JNIEnv *env, jobject type, jlong 
     avifDecoderDestroy(decoder);
 }
 
+jboolean JNICALL
+Java_com_seiko_avif_AvifDecoder_nextImage(JNIEnv *env, jobject type, jlong context) {
+    avifDecoder *decoder = jlong_to_ptr(context);
+    return avifDecoderNextImage(decoder) == AVIF_RESULT_OK;
+}
+
+jint JNICALL
+Java_com_seiko_avif_AvifDecoder_getImageCount(JNIEnv *env, jobject type, jlong context) {
+    avifDecoder *decoder = jlong_to_ptr(context);
+    return decoder->imageCount;
+}
+
 jint JNICALL
 Java_com_seiko_avif_AvifDecoder_getImageWidth(JNIEnv *env, jobject type, jlong context) {
     avifDecoder *decoder = jlong_to_ptr(context);

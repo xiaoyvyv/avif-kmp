@@ -5,6 +5,8 @@ expect class AvifDecoder {
         fun create(bytes: ByteArray): AvifDecoder
     }
 
+    fun nextImage(): Boolean
+
     fun getImageCount(): Int
 
     fun getImageWidth(): Int
