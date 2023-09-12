@@ -13,6 +13,7 @@ kotlin {
             }
         }
     }
+    jvmToolchain(11)
 }
 
 android {
@@ -32,7 +33,5 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        jvmToolchain(11)
-    }
+    ndkVersion = "25.2.9519653"
 }

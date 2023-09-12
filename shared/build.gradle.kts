@@ -6,9 +6,7 @@ plugins {
 
 kotlin {
     androidTarget()
-
     jvm("desktop")
-
     listOf(
         iosX64(),
         iosArm64(),
@@ -19,7 +17,6 @@ kotlin {
             isStatic = true
         }
     }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -28,6 +25,7 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+                api(project(":library"))
             }
         }
         val androidMain by getting {
@@ -52,12 +50,12 @@ kotlin {
             }
         }
     }
+    jvmToolchain(11)
 }
 
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
     namespace = "com.myapplication.common"
-
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
@@ -68,8 +66,5 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlin {
-        jvmToolchain(11)
     }
 }

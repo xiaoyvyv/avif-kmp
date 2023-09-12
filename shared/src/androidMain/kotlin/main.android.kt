@@ -9,9 +9,10 @@ fun MainView() = App()
 
 actual fun generateImageBitmap(decoder: AvifDecoder): ImageBitmap {
     return decoder.use {
+        it.nextImage() // first image is empty
         Bitmap.createBitmap(
-            decoder.getImageWidth(),
-            decoder.getImageHeight(),
+            it.getImageWidth(),
+            it.getImageHeight(),
             Bitmap.Config.ARGB_8888,
         ).also { bitmap ->
             it.getFrame(bitmap)
