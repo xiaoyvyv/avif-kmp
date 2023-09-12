@@ -19,23 +19,26 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun App() {
     MaterialTheme {
-        var greetingText by remember { mutableStateOf("Hello, World!") }
-        var showImage by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = {
-                greetingText = "Hello, ${getPlatformName()}"
-                showImage = !showImage
-            }) {
-                Text(greetingText)
+            val painter by produceState(EmptyPainter) {
+                val bytes = resource("test.avif").readBytes()
+                val decoder = AvifDecoder.create(bytes)
+                BitmapPainter(generateImageBitmap(decoder))
             }
-            AnimatedVisibility(showImage) {
-                Image(
-                    painterResource("compose-multiplatform.xml"),
-                    null
-                )
-            }
+            Image(
+                painter,
+                null,
+                Modifier.fillMaxWidth(),
+            )
         }
     }
 }
+
+private object EmptyPainter : Painter() {
+    override val intrinsicSize get() = Size.Unspecified
+    override fun DrawScope.onDraw() = Unit
+}
+
+expect fun generateImageBitmap(decoder: AvifDecoder): ImageBitmap
 
 expect fun getPlatformName(): String
