@@ -1,5 +1,9 @@
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.window.ComposeUIViewController
-
-actual fun getPlatformName(): String = "iOS"
+import com.seiko.avif.PlatformBitmap
 
 fun MainViewController() = ComposeUIViewController { App() }
+
+internal actual fun PlatformBitmap.asImageBitmap(): ImageBitmap {
+    TODO()
+}

@@ -1,11 +1,17 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -15,6 +21,8 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
+import com.seiko.avif.AvifImage
+import com.seiko.avif.PlatformBitmap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 
@@ -23,11 +31,21 @@ import org.jetbrains.compose.resources.resource
 fun App() {
     MaterialTheme {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            var title by remember { mutableStateOf("") }
+
             val painter by produceState<Painter>(EmptyPainter) {
                 val bytes = resource("test.avif").readBytes()
                 val decoder = AvifDecoder.create(bytes)
-                value = BitmapPainter(generateImageBitmap(decoder))
+
+                val image = getFirstFrameImageBitmap(decoder)
+                title = "width=${image.getWidth()}, height=${image.getHeight()}"
+
+                value = BitmapPainter(image.getPlatformBitmap().asImageBitmap())
+
+                decoder.close()
             }
+            Text(title)
+            Spacer(Modifier.height(8.dp))
             Image(
                 painter,
                 null,
@@ -42,6 +60,11 @@ private object EmptyPainter : Painter() {
     override fun DrawScope.onDraw() = Unit
 }
 
-expect fun generateImageBitmap(decoder: AvifDecoder): ImageBitmap
+private fun getFirstFrameImageBitmap(decoder: AvifDecoder): AvifImage {
+    decoder.nextImage()
+    return decoder.getImage()
+}
 
-expect fun getPlatformName(): String
+internal expect fun PlatformBitmap.asImageBitmap(): ImageBitmap
+
+// internal expect fun ByteArray.toImageBitmap(): ImageBitmap

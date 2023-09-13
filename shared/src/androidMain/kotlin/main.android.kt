@@ -1,23 +1,11 @@
-import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import com.seiko.avif.AvifDecoder
+import com.seiko.avif.PlatformBitmap
 
 @Composable
 fun MainView() = App()
 
-actual fun generateImageBitmap(decoder: AvifDecoder): ImageBitmap {
-    return decoder.use {
-        it.nextImage() // first image is empty
-        Bitmap.createBitmap(
-            it.getImageWidth(),
-            it.getImageHeight(),
-            Bitmap.Config.ARGB_8888,
-        ).also { bitmap ->
-            it.getFrame(bitmap)
-        }.asImageBitmap()
-    }
+internal actual fun PlatformBitmap.asImageBitmap(): ImageBitmap {
+    return this@asImageBitmap.asImageBitmap()
 }
-
-actual fun getPlatformName(): String = "Android"
