@@ -20,12 +20,22 @@ kotlin {
                 withAndroidTarget()
                 withJvm()
             }
-            group("native") {
-                group("ios") {
-                    withIosX64()
-                    withIosArm64()
-                    withIosSimulatorArm64()
+            group("skia") {
+                group("native") {
+                    group("ios") {
+                        withIosX64()
+                        withIosArm64()
+                        withIosSimulatorArm64()
+                    }
                 }
+                withJvm()
+            }
+        }
+    }
+    sourceSets {
+        val skiaMain by getting {
+            dependencies {
+                api("org.jetbrains.skiko:skiko:0.7.73")
             }
         }
     }
