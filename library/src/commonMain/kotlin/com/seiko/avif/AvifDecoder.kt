@@ -7,12 +7,11 @@ expect class AvifDecoder {
 
     fun nextImage(): Boolean
 
+    fun getImage(): AvifImage
+
     fun getImageCount(): Int
 
-    fun getImageWidth(): Int
-    fun getImageHeight(): Int
-
-    fun getFrame(bitmap: Any): Int
+    fun getImageDurationMs(): Int
 
     fun close()
 }

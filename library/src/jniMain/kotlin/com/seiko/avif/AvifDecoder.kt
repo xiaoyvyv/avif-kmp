@@ -24,20 +24,16 @@ actual class AvifDecoder private constructor(
         return nextImage(context)
     }
 
+    actual fun getImage(): AvifImage {
+        return AvifImage.create(getImage(context))
+    }
+
     actual fun getImageCount(): Int {
-        return context.toInt()
+        return getImageCount(context)
     }
 
-    actual fun getImageWidth(): Int {
-        return getImageWidth(context)
-    }
-
-    actual fun getImageHeight(): Int {
-        return getImageHeight(context)
-    }
-
-    actual fun getFrame(bitmap: Any): Int {
-        return getFrame(context, bitmap)
+    actual fun getImageDurationMs(): Int {
+        return getImageDurationMs(context)
     }
 
     actual override fun close() {
@@ -55,9 +51,8 @@ actual class AvifDecoder private constructor(
     }
 
     private external fun nextImage(context: Long): Boolean
+    private external fun getImage(context: Long): Long
     private external fun getImageCount(context: Long): Int
-    private external fun getImageWidth(context: Long): Int
-    private external fun getImageHeight(context: Long): Int
-    private external fun getFrame(context: Long, bitmap: Any): Int
+    private external fun getImageDurationMs(context: Long): Int
     private external fun destroyContext(context: Long)
 }

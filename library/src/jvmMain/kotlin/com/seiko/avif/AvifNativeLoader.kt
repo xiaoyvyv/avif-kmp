@@ -32,4 +32,4 @@ internal actual fun loadNativeLibrary() {
     System.load(nativeLibraryFile.toAbsolutePath().toString())
 }
 
-private const val jni_prefix = "avif-kmp"
+private const val jni_prefix = "avif-jvm"

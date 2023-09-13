@@ -7,7 +7,23 @@ actual class AvifDecoder private constructor() {
         }
     }
 
+    actual fun nextImage(): Boolean {
+        TODO()
+    }
+
+    actual fun getImage(): AvifImage {
+        TODO()
+    }
+
     actual fun getImageCount(): Int {
-        return 0
+        TODO()
+    }
+
+    actual fun getImageDurationMs(): Int {
+        TODO()
+    }
+
+    actual fun close() {
+        TODO()
     }
 }
