@@ -13,9 +13,9 @@ set -e
 if [! -x dav1d]; then
   git clone -b 1.2.1 --depth 1 https://code.videolan.org/videolan/dav1d.git
 fi
+
 cd dav1d
-rm -rf build
-mkdir build
+mkdir -p build
 cd build
 
 # This only works on darwin.
@@ -25,9 +25,9 @@ ABI_LIST=("armeabi-v7a" "arm64-v8a" "x86" "x86_64")
 ARCH_LIST=("arm" "aarch64" "x86" "x86_64")
 for i in "${!ABI_LIST[@]}"; do
   abi="${ABI_LIST[i]}"
-  mkdir "${abi}"
+  mkdir -p "${abi}"
   cd "${abi}"
-  PATH=$PATH:${android_bin} meson setup --default-library=static --buildtype release \
+  PATH=$PATH:${android_bin} meson setup --default-library=static --buildtype=release \
     --cross-file="../../package/crossfiles/${ARCH_LIST[i]}-android.meson" \
     -Denable_tools=false -Denable_tests=false ../..
   PATH=$PATH:${android_bin} ninja
