@@ -9,6 +9,13 @@ expect class AvifImage {
 
     // make sure AvifDecoder not close
     fun getFrame(bitmap: PlatformBitmap): Boolean
+}
 
-    fun getPlatformBitmap(width: Int = getWidth(), height: Int = getHeight()): PlatformBitmap
+fun AvifImage.getPlatformBitmap(
+    width: Int = getWidth(),
+    height: Int = getHeight(),
+): PlatformBitmap {
+    val bitmap = createPlatformBitmap(width, height)
+    getFrame(bitmap)
+    return bitmap
 }

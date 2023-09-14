@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
 import com.seiko.avif.AvifImage
 import com.seiko.avif.PlatformBitmap
+import com.seiko.avif.getPlatformBitmap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 
