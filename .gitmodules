@@ -1,3 +1,0 @@
-[submodule "library/native/libavif"]
-	path = library/native/libavif
-	url = git@github.com:AOMediaCodec/libavif.git
