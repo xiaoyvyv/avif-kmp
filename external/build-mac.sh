@@ -56,11 +56,11 @@ function build() {
 
   # Build commands extracted from Github Actions
   echoRun mkdir -p build/jni/$MACOS_ARCH/
-  echoRun mkdir -p library/src/jvmMain/resources/jni/$MACOS_ARCH/
-  echoRun cmake -S library/src/jvmMain/ -B build/jni/$MACOS_ARCH/ \
+  echoRun mkdir -p ../library/src/jvmMain/resources/jni/$MACOS_ARCH/
+  echoRun cmake -S ../library/src/jvmMain/ -B build/jni/$MACOS_ARCH/ \
     -DCMAKE_OSX_ARCHITECTURES=$CMAKE_ARCH
   echoRun cmake --build build/jni/$MACOS_ARCH/ --verbose
-  echoRun cp -v build/jni/$MACOS_ARCH/libavif-jvm.* library/src/jvmMain/resources/jni/$MACOS_ARCH/
+  echoRun cp -v build/jni/$MACOS_ARCH/libavif-jvm.* ../library/src/jvmMain/resources/jni/$MACOS_ARCH/
 
   echo "Build complete."
   exit 0

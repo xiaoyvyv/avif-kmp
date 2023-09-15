@@ -1,0 +1,3 @@
+staticLibraries.mingw = avif.lib
+staticLibraries.linux = libavif.a
+staticLibraries.osx = libavif.a

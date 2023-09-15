@@ -41,9 +41,14 @@ kotlin {
     }
     targets.withType<KotlinNativeTarget> {
         val main by compilations.getting
+        // main.defaultSourceSet.dependsOn(nativeMain)
         main.cinterops {
-            create("avif-kmp") {
+            create("avif") {
+                packageName("com.seiko.avif")
+                headers(file("native/libavif/include/avif/avif.h"))
 
+                val libraryPath = file("src/nativeInterop/cinterop/lib")
+                extraOpts("-libraryPath", "$libraryPath")
             }
         }
     }
