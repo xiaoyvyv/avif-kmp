@@ -67,5 +67,3 @@ private fun getFirstFrameImageBitmap(decoder: AvifDecoder): AvifImage {
 }
 
 internal expect fun PlatformBitmap.asImageBitmap(): ImageBitmap
-
-// internal expect fun ByteArray.toImageBitmap(): ImageBitmap
