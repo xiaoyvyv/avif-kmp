@@ -35,7 +35,7 @@ kotlin {
     sourceSets {
         val skiaMain by getting {
             dependencies {
-                api("org.jetbrains.skiko:skiko:0.7.73")
+                api("org.jetbrains.skiko:skiko:0.7.80")
             }
         }
     }
