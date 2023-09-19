@@ -1,0 +1,3 @@
+[submodule "library/darwin/libavif"]
+	path = library/darwin/libavif
+	url = git@github.com:AOMediaCodec/libavif.git
