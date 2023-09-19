@@ -3,7 +3,7 @@
 import org.gradle.internal.os.OperatingSystem
 
 val clean by tasks.creating {
-    group = taskGroup
+    group = "build"
     doLast {
         delete(projectDir.resolve("build"))
     }
@@ -17,6 +17,7 @@ val buildLibAvifHost by tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvif.dependsOn(this)
 
+    // inputs.files(projectDir.resolve("scripts/build-host.sh"))
     outputs.dir(projectDir.resolve("build/$targetName"))
 
     workingDir = projectDir
@@ -30,7 +31,7 @@ val buildLibAvifIos by tasks.creating(Exec::class) {
 
     onlyIf { currentOs.isMacOsX }
 
-    inputs.files(projectDir.resolve("build-ios.sh"))
+    // inputs.files(projectDir.resolve("scripts/build-ios.sh"))
     outputs.dir(projectDir.resolve("build/ios"))
 
     workingDir = projectDir
@@ -49,7 +50,7 @@ fun createBuildLibAvifAndroidTask(arch: String) = tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvifAndroid.dependsOn(this)
 
-    inputs.files(projectDir.resolve("build-android.sh"))
+    // inputs.files(projectDir.resolve( "scripts/build-android.sh"))
     outputs.dir(projectDir.resolve("build/android/$arch"))
 
     val toolchain = when {
@@ -82,4 +83,4 @@ private val targetName: String
     }
 
 private val taskGroup: String
-    get() = "build"
+    get() = "avif"

@@ -12,31 +12,20 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 find_package(JNI REQUIRED)
 include_directories(${JNI_INCLUDE_DIRS})
 
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(AVIF_LOCAL_LIBGAV1 OFF CACHE BOOL "" FORCE)
 set(AVIF_CODEC_LIBGAV1 OFF CACHE BOOL "" FORCE)
-set(AVIF_LOCAL_DAV1D OFF CACHE BOOL "" FORCE)
+set(AVIF_LOCAL_DAV1D ON CACHE BOOL "" FORCE)
 set(AVIF_CODEC_DAV1D ON CACHE BOOL "" FORCE)
 
 set(PROJECT_NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../native)
-set(EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../../../external)
 
 include_directories(
         ${PROJECT_NATIVE_DIR}/skia/include
         ${PROJECT_NATIVE_DIR}/skia
 )
 
-# TODO: ======= WAIT TO REMOVE =========
-add_library(lib_dav1d STATIC IMPORTED)
-set_target_properties(lib_dav1d PROPERTIES IMPORTED_LOCATION
-        ${EXTERNAL_DIR}/build/dav1d/native-darwin/src/libdav1d.a)
-set(DAV1D_INCLUDE_DIR
-        ${EXTERNAL_DIR}/deps/dav1d/include
-        ${EXTERNAL_DIR}/build/dav1d/native-darwin/include/dav1d)
-set(DAV1D_VERSION 1.2.1)
-set(DAV1D_LIBRARY lib_dav1d)
-# ================================
-
-add_subdirectory(${EXTERNAL_DIR}/deps/libavif libavif)
+add_subdirectory(${CMAKE_SOURCE_DIR}/../../darwin/libavif libavif)
 
 file(GLOB_RECURSE sources
         ${PROJECT_NATIVE_DIR}/avif-decoder-jni.cpp

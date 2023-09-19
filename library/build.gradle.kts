@@ -1,10 +1,9 @@
-import co.touchlab.cklib.gradle.CompileToBitcode.Language.C
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("co.touchlab.cklib")
+    // id("co.touchlab.cklib")
 }
 
 kotlin {
@@ -41,15 +40,20 @@ kotlin {
     }
     targets.withType<KotlinNativeTarget> {
         val main by compilations.getting
-        // main.defaultSourceSet.dependsOn(nativeMain)
+        val libraryPath = file("$rootDir/library/darwin/build/ios")
         main.cinterops {
             create("avif") {
-                packageName("com.seiko.avif")
-                headers(file("native/libavif/include/avif/avif.h"))
-
-                val libraryPath = file("src/nativeInterop/cinterop/lib")
+                includeDirs {
+                    headerFilterOnly(file("darwin/libavif/include/avif"))
+                }
                 extraOpts("-libraryPath", "$libraryPath")
             }
+        }
+        main.kotlinOptions {
+            // https://youtrack.jetbrains.com/issue/KT-39396
+            freeCompilerArgs += listOf(
+                "-include-binary", "$libraryPath/libavif.a",
+            )
         }
     }
     jvmToolchain(11)
@@ -87,10 +91,10 @@ android {
     }
 }
 
-cklib {
-    config.kotlinVersion = extra["kotlin.version"] as String
-    create("avif-kmp") {
-        language = C
-        srcDirs = project.files(file("native/libavif"), file("native/common"))
-    }
-}
+// cklib {
+//     config.kotlinVersion = extra["kotlin.version"] as String
+//     create("avif-kmp") {
+//         language = C
+//         srcDirs = project.files(file("native/libavif"), file("native/common"))
+//     }
+// }
