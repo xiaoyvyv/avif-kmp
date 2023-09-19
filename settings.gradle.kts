@@ -4,6 +4,7 @@ include(":androidApp")
 include(":desktopApp")
 include(":shared")
 include(":library")
+include(":library:darwin")
 
 pluginManagement {
     repositories {
