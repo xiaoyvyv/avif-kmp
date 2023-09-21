@@ -89,6 +89,7 @@ android {
             path = file("src/androidMain/CMakeLists.txt")
         }
     }
+    ndkVersion = "25.1.8937393"
 }
 
 // cklib {
