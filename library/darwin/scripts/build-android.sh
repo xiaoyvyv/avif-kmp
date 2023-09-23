@@ -10,22 +10,36 @@ cd ext/dav1d || exit 255
 mkdir -p "build/${ABI}"
 cd "build/${ABI}" || exit 255
 
-ARCH_LIST=(
-  ["armeabi-v7a"]="arm"
-  ["arm64-v8a"]="aarch64"
-  ["x86"]="x86"
-  ["x86_64"]="x86_64"
-)
+get_android_arch() {
+  case ${ABI} in
+  armeabi-v7a)
+    echo "arm"
+    ;;
+  arm64-v8a)
+    echo "aarch64"
+    ;;
+  x86)
+    echo "x86"
+    ;;
+  x86_64)
+    echo "x86_64"
+    ;;
+  esac
+}
 
 android_toolchain=$(echo "${ANDROID_NDK}/toolchains/llvm/prebuilt/"*)
-echo "android toolchains: $android_toolchain"
-
 android_bin="${android_toolchain}/bin"
+cross_file="../../package/crossfiles/$(get_android_arch)-android.meson"
+
+echo "build android abi: ${ABI}"
+echo "android arch: $(get_android_arch)"
+echo "android toolchains: $android_toolchain"
+echo "cross file: ${cross_file}"
 
 PATH=$PATH:${android_bin} meson setup \
   --default-library=static \
-  --buildtype release \
-  --cross-file="../../package/crossfiles/${ARCH_LIST[ABI]}-android.meson" \
+  --buildtype=release \
+  --cross-file="${cross_file}" \
   -Denable_tools=false \
   -Denable_tests=false \
   ../..
@@ -40,10 +54,10 @@ build_dir="_build-android_${ABI}"
 mkdir -p "${build_dir}"
 
 cmake -B "${build_dir}" \
-  -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK}/build/cmake/android.toolchain.cmake"  \
+  -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK}/build/cmake/android.toolchain.cmake" \
   -DANDROID_ABI="${ABI}" \
+  -DANDROID_STL=c++_shared \
   -DANDROID_PLATFORM="android-${ANDROID_MIN_SDK}" \
-  -DCMAKE_ANDROID_STL_TYPE=c++_shared \
   -DCMAKE_SYSTEM_NAME=Android \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF \
