@@ -19,13 +19,23 @@ set(AVIF_LOCAL_DAV1D ON CACHE BOOL "" FORCE)
 set(AVIF_CODEC_DAV1D ON CACHE BOOL "" FORCE)
 
 set(PROJECT_NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../native)
+set(PROJECT_LIB_DIR ${CMAKE_SOURCE_DIR}/../../darwin)
+
+add_library(yuv STATIC IMPORTED)
+add_library(sharpyuv STATIC IMPORTED)
+add_library(dav1d STATIC IMPORTED)
+add_library(avif STATIC IMPORTED)
+set_target_properties(yuv PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build/native/libyuv.a)
+set_target_properties(sharpyuv PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build/native/libsharpyuv.a)
+set_target_properties(dav1d PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build/native/libdav1d.a)
+set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build/native/libavif.a)
+
+include_directories(${PROJECT_LIB_DIR}/libavif/include)
 
 include_directories(
         ${PROJECT_NATIVE_DIR}/skia/include
         ${PROJECT_NATIVE_DIR}/skia
 )
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/../../darwin/libavif libavif)
 
 file(GLOB_RECURSE sources
         ${PROJECT_NATIVE_DIR}/avif-decoder-jni.cpp
@@ -35,4 +45,4 @@ file(GLOB_RECURSE sources
 add_library(avif-jvm SHARED ${sources})
 
 #target_compile_definitions(avif-jvm PUBLIC CONFIG_VERSION="${QUICKJS_VERSION}")
-target_link_libraries(avif-jvm avif)
+target_link_libraries(avif-jvm yuv sharpyuv dav1d avif)

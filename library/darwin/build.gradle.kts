@@ -14,16 +14,15 @@ val buildLibAvif by tasks.creating {
     group = taskGroup
 }
 
-val buildLibAvifHost by tasks.creating(Exec::class) {
+val buildLibAvifNative by tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvif.dependsOn(this)
 
-    inputs.files(projectDir.resolve("scripts/build-host.sh"))
-    outputs.dir(projectDir.resolve("build/$targetName"))
+    inputs.files(projectDir.resolve("scripts/build-native.sh"))
+    outputs.dir(projectDir.resolve("build/native"))
 
     workingDir = projectDir
-    environment("TARGET", targetName)
-    commandLine("bash", "-l", "scripts/build-host.sh")
+    commandLine("bash", "-l", "scripts/build-native.sh")
 }
 
 val buildLibAvifIos by tasks.creating(Exec::class) {
