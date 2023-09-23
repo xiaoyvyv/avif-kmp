@@ -12,13 +12,7 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 find_package(JNI REQUIRED)
 include_directories(${JNI_INCLUDE_DIRS})
 
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(AVIF_LOCAL_LIBGAV1 OFF CACHE BOOL "" FORCE)
-set(AVIF_CODEC_LIBGAV1 OFF CACHE BOOL "" FORCE)
-set(AVIF_LOCAL_DAV1D ON CACHE BOOL "" FORCE)
-set(AVIF_CODEC_DAV1D ON CACHE BOOL "" FORCE)
-
-set(PROJECT_NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../native)
+set(PROJECT_WRAPPER_DIR ${CMAKE_SOURCE_DIR}/../../wrapper)
 set(PROJECT_LIB_DIR ${CMAKE_SOURCE_DIR}/../../darwin)
 
 add_library(yuv STATIC IMPORTED)
@@ -33,14 +27,14 @@ set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
 
 include_directories(
-        ${PROJECT_NATIVE_DIR}/skia/include
-        ${PROJECT_NATIVE_DIR}/skia
+        ${PROJECT_WRAPPER_DIR}/skia/include
+        ${PROJECT_WRAPPER_DIR}/skia
 )
 
 file(GLOB_RECURSE sources
-        ${PROJECT_NATIVE_DIR}/avif-decoder-jni.cpp
-        ${PROJECT_NATIVE_DIR}/avif-image-jni.cpp
-        ${PROJECT_NATIVE_DIR}/avif-image-jvm.cpp
+        ${PROJECT_WRAPPER_DIR}/avif-decoder-jni.cpp
+        ${PROJECT_WRAPPER_DIR}/avif-image-jni.cpp
+        ${PROJECT_WRAPPER_DIR}/avif-image-jvm.cpp
 )
 add_library(avif-jvm SHARED ${sources})
 
