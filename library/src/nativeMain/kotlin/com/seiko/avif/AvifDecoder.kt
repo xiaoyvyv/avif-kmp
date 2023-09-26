@@ -10,6 +10,14 @@ import kotlinx.cinterop.objcPtr
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.toLong
+import platform.avif.AVIF_RESULT_OK
+import platform.avif.AVIF_TRUE
+import platform.avif.avifDecoder
+import platform.avif.avifDecoderCreate
+import platform.avif.avifDecoderDestroy
+import platform.avif.avifDecoderNextImage
+import platform.avif.avifDecoderParse
+import platform.avif.avifDecoderSetIOMemory
 import platform.posix.uint8_tVar
 
 @OptIn(ExperimentalForeignApi::class)

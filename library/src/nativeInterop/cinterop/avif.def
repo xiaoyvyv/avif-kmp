@@ -1,3 +1,6 @@
+package=platform.avif
+headers=avif.h
+headerFilter=avif/** avif.h
 staticLibraries.mingw = avif.lib
 staticLibraries.linux = libavif.a
 staticLibraries.osx = libavif.a

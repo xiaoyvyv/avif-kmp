@@ -52,6 +52,7 @@ kotlin {
         main.kotlinOptions {
             // https://youtrack.jetbrains.com/issue/KT-39396
             freeCompilerArgs += listOf(
+                "-include-binary", "$libraryPath/libdav1d.a",
                 "-include-binary", "$libraryPath/libavif.a",
             )
         }

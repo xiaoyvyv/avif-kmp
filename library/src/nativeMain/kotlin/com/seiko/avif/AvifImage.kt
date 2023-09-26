@@ -7,6 +7,7 @@ import kotlinx.cinterop.cValue
 import kotlinx.cinterop.cValuesOf
 import kotlinx.cinterop.objcPtr
 import kotlinx.cinterop.ptr
+import platform.avif.avifImage
 import platform.posix.uint8_tVar
 
 actual class AvifImage private constructor(
