@@ -22,12 +22,8 @@ val buildLibAvifNative by tasks.creating(Exec::class) {
     outputs.dir(projectDir.resolve("build/native"))
 
     workingDir = projectDir
-    commandLine("bash", "-l", "scripts/build-native.sh")
-}
 
-val buildLibAvifIos by tasks.creating(Exec::class) {
-    group = taskGroup
-    buildLibAvif.dependsOn(this)
+    commandLine("bash", "-l", "scripts/build-native.sh")
 }
 
 val buildLibAvifAndroid by tasks.creating {
@@ -39,19 +35,24 @@ val buildLibAvifAndroid_x86 by createBuildLibAvifAndroidTask("x86")
 val buildLibAvifAndroid_arm64_v8a by createBuildLibAvifAndroidTask("arm64-v8a")
 val buildLibAvifAndroid_armeabi_v7a by createBuildLibAvifAndroidTask("armeabi-v7a")
 
-fun createBuildLibAvifIosTask(abi: String) = tasks.creating(Exec::class) {
+val buildLibAvifIos by tasks.creating(Exec::class) {
     group = taskGroup
-    buildLibAvifIos.dependsOn(this)
+    buildLibAvif.dependsOn(this)
 
     onlyIf { currentOs.isMacOsX }
 
     inputs.files(projectDir.resolve("scripts/build-ios.sh"))
+    inputs.files(projectDir.resolve("crossfiles"))
+    inputs.files(projectDir.resolve("ios.toolchain.cmake"))
     outputs.dir(projectDir.resolve("build/ios"))
 
     workingDir = projectDir
-    environment("IOS_TOOLCHAIN_FILE", file("ios.toolchain.cmake"))
+    environment("IOS_CROSS_FILE", file("crossfiles/iphone_simulator.meson"))
+
     // https://github.com/leetal/ios-cmake/tree/master#platform-flag-options--dplatformflag
-    environment("BUILD_PLATFORM", "SIMULATORARM64")
+    environment("IOS_TOOLCHAIN_FILE", file("ios.toolchain.cmake"))
+    environment("BUILD_PLATFORM1", "SIMULATORARM64")
+
     commandLine("bash", "-l", "scripts/build-ios.sh")
 }
 
@@ -59,7 +60,7 @@ fun createBuildLibAvifAndroidTask(abi: String) = tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvifAndroid.dependsOn(this)
 
-    inputs.files(projectDir.resolve( "scripts/build-android.sh"))
+    inputs.files(projectDir.resolve("scripts/build-android.sh"))
     outputs.dir(projectDir.resolve("build/android/$abi"))
 
     val toolchain = when {
@@ -70,10 +71,12 @@ fun createBuildLibAvifAndroidTask(abi: String) = tasks.creating(Exec::class) {
     }
 
     workingDir = projectDir
+
     environment("TOOLCHAIN", toolchain)
     environment("ABI", abi)
     environment("ANDROID_NDK", androidExtension.ndkDirectory)
     environment("ANDROID_MIN_SDK", androidExtension.defaultConfig.minSdk!!)
+
     commandLine("bash", "-l", "scripts/build-android.sh")
 }
 
