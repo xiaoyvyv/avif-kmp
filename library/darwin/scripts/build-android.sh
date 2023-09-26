@@ -27,7 +27,7 @@ get_android_arch() {
   esac
 }
 
-android_toolchain=$(echo "${ANDROID_NDK}/toolchains/llvm/prebuilt/"*)
+android_toolchain="${ANDROID_NDK}/toolchains/llvm/prebuilt/${TOOLCHAIN}"
 android_bin="${android_toolchain}/bin"
 cross_file="../../package/crossfiles/$(get_android_arch)-android.meson"
 
