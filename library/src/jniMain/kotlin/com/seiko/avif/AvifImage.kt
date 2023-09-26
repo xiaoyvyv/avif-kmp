@@ -23,15 +23,11 @@ actual class AvifImage private constructor(
     }
 
     actual fun getFrame(bitmap: PlatformBitmap): Boolean {
-        return getFrame(context, getBitmapId(bitmap))
+        return getFrame(context, bitmap.ptr)
     }
 
     private external fun getWidth(context: Long): Int
     private external fun getHeight(context: Long): Int
     private external fun getDepth(context: Long): Int
-    private external fun getFrame(context: Long, bitmap: BitmapId): Boolean
+    private external fun getFrame(context: Long, bitmap: PlatformBitmapPtr): Boolean
 }
-
-expect class BitmapId
-
-internal expect fun getBitmapId(bitmap: PlatformBitmap): BitmapId
