@@ -1,0 +1,3 @@
+package=platform.avif
+headers=avif/avif.h
+staticLibraries=libdav1d.a libavif.a

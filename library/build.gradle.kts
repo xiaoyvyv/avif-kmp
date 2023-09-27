@@ -1,9 +1,10 @@
+import co.touchlab.cklib.gradle.CompileToBitcode.Language
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    // id("co.touchlab.cklib")
+    id("co.touchlab.cklib")
 }
 
 kotlin {
@@ -32,6 +33,11 @@ kotlin {
         }
     }
     sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            }
+        }
         val skiaMain by getting {
             dependencies {
                 api("org.jetbrains.skiko:skiko:0.7.80")
@@ -43,15 +49,21 @@ kotlin {
         val libraryPath = file("$rootDir/library/darwin/build/ios")
         main.cinterops {
             create("avif") {
-                includeDirs {
-                    headerFilterOnly(file("darwin/libavif/include/avif"))
-                }
+                defFile("src/nativeMain/cinterop/avif.def")
+
+                includeDirs(file("darwin/libavif/include"))
+
                 extraOpts("-libraryPath", "$libraryPath")
+                // extraOpts("-libraryPath", "${layout.buildDirectory.file("cklib/avif/ios_simulator_arm64").get().asFile}")
+                // linkerOpts("${layout.buildDirectory.file("cklib/avif/ios_simulator_arm64").get().asFile}")
+
+                header(file("wrapper/common/avifImageNative.h"))
             }
         }
         main.kotlinOptions {
             // https://youtrack.jetbrains.com/issue/KT-39396
             freeCompilerArgs += listOf(
+                // "-native-library", "${layout.buildDirectory.file("cklib/avif/ios_simulator_arm64/avif.bc").get().asFile}",
                 "-include-binary", "$libraryPath/libdav1d.a",
                 "-include-binary", "$libraryPath/libavif.a",
             )
@@ -103,10 +115,24 @@ val buildLibAvifNativeKLib by tasks.creating(Exec::class) {
     commandLine("bash", "-l", "build-jvm-klib.sh")
 }
 
-// cklib {
-//     config.kotlinVersion = extra["kotlin.version"] as String
-//     create("avif-kmp") {
-//         language = C
-//         srcDirs = project.files(file("native/libavif"), file("native/common"))
-//     }
-// }
+cklib {
+    config.kotlinVersion = extra["kotlin.version"] as String
+    create("avif") {
+        language = Language.C
+        srcDirs = project.files(
+            file("wrapper/common"),
+        )
+        headersDirs += project.files(
+            file("darwin/libavif/include"),
+            file("wrapper/skia/include"),
+            file("wrapper/skia"),
+        )
+        compilerArgs.addAll(
+            listOf(
+                // "-nostdinc++",
+                // "-Wno-unused-parameter",
+                // "-Wno-unused-function",
+            )
+        )
+    }
+}

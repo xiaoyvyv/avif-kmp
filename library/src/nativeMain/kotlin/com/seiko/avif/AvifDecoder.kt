@@ -29,12 +29,12 @@ actual class AvifDecoder private constructor(
         @Suppress("UNCHECKED_CAST")
         actual fun create(bytes: ByteArray): AvifDecoder {
             val decoderRef = avifDecoderCreate()
-            val decoder = decoderRef!![0]
+            val decoder = requireNotNull(decoderRef)[0]
 
             decoder.maxThreads = 1
             decoder.ignoreExif = AVIF_TRUE
             decoder.ignoreXMP = AVIF_TRUE
-            bytes.objcPtr()
+
             var result = avifDecoderSetIOMemory(
                 decoder.ptr,
                 bytes.refTo(0) as CValuesRef<uint8_tVar>,
@@ -58,7 +58,7 @@ actual class AvifDecoder private constructor(
     }
 
     actual fun getImage(): AvifImage {
-        return AvifImage.create(decoder.image!![0])
+        return AvifImage.create(requireNotNull(decoder.image)[0])
     }
 
     actual fun getImageCount(): Int {
