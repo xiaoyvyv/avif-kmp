@@ -75,7 +75,7 @@ fun createBuildLibAvifAndroidTask(abi: String) = tasks.creating(Exec::class) {
     environment("TOOLCHAIN", toolchain)
     environment("ABI", abi)
     environment("ANDROID_NDK", androidExtension.ndkDirectory)
-    environment("ANDROID_MIN_SDK", androidExtension.defaultConfig.minSdk!!)
+    environment("ANDROID_MIN_SDK", androidExtension.defaultConfig.minSdk ?: 21)
 
     commandLine("bash", "-l", "scripts/build-android.sh")
 }
