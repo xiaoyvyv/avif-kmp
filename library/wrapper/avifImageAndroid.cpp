@@ -3,7 +3,7 @@
 
 #include "avif/avif.h"
 
-#include "util-android.h"
+#include "logAndroid.h"
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifImage_getFrame(JNIEnv *env, jobject type,

@@ -14,9 +14,9 @@ set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
 
 file(GLOB_RECURSE sources
-        ${PROJECT_WRAPPER_DIR}/avif-decoder-jni.cpp
-        ${PROJECT_WRAPPER_DIR}/avif-image-jni.cpp
-        ${PROJECT_WRAPPER_DIR}/avif-image-android.cpp)
+        ${PROJECT_WRAPPER_DIR}/avifDecoderJni.cpp
+        ${PROJECT_WRAPPER_DIR}/avifImageJni.cpp
+        ${PROJECT_WRAPPER_DIR}/avifImageAndroid.cpp)
 add_library(avif-android SHARED ${sources})
 
 target_link_libraries(avif-android jnigraphics dav1d avif log)

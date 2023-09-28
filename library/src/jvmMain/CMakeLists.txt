@@ -32,9 +32,9 @@ include_directories(
 )
 
 file(GLOB_RECURSE sources
-        ${PROJECT_WRAPPER_DIR}/avif-decoder-jni.cpp
-        ${PROJECT_WRAPPER_DIR}/avif-image-jni.cpp
-        ${PROJECT_WRAPPER_DIR}/avif-image-jvm.cpp
+        ${PROJECT_WRAPPER_DIR}/avifDecoderJni.cpp
+        ${PROJECT_WRAPPER_DIR}/avifImageJni.cpp
+        ${PROJECT_WRAPPER_DIR}/avifImageJvm.cpp
 )
 add_library(avif-jvm SHARED ${sources})
 
