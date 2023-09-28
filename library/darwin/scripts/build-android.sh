@@ -4,9 +4,9 @@ cd libavif || exit 255
 if ! [ -f ext/dav1d ]; then
   git clone -b 1.2.1 --depth 1 https://code.videolan.org/videolan/dav1d.git ext/dav1d
 fi
-
 cd ext/dav1d || exit 255
 
+rm -rf "build/${ABI}"
 mkdir -p "build/${ABI}"
 cd "build/${ABI}" || exit 255
 
@@ -51,6 +51,7 @@ cd ../..
 
 # START avif
 build_dir="_build-android_${ABI}"
+rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
 cmake -B "${build_dir}" \

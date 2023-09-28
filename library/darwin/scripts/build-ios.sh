@@ -32,16 +32,13 @@ cd ../..
 
 # START avif
 build_dir="_build-ios"
+rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
 cmake -B "${build_dir}" -G Xcode \
   -DCMAKE_TOOLCHAIN_FILE="${IOS_TOOLCHAIN_FILE}" \
   -DPLATFORM="${BUILD_PLATFORM1}" \
   -DBUILD_SHARED_LIBS=OFF \
-  -DAVIF_CODEC_AOM=OFF \
-  -DAVIF_LOCAL_AOM=OFF \
-  -DAVIF_CODEC_AOM_DECODE=OFF \
-  -DAVIF_CODEC_AOM_ENCODE=OFF \
   -DAVIF_CODEC_DAV1D=ON \
   -DAVIF_LOCAL_DAV1D=ON \
   -DAVIF_LOCAL_LIBYUV=OFF \

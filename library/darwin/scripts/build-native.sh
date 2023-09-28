@@ -6,6 +6,7 @@ if ! [ -f ext/libyuv ]; then
 fi
 cd ext/libyuv || exit 255
 
+rm -rf "build"
 mkdir -p "build"
 cd "build" || exit 255
 
@@ -22,6 +23,7 @@ if ! [ -f ext/libwebp ]; then
 fi
 cd ext/libwebp || exit 255
 
+rm -rf "build"
 mkdir -p "build"
 cd "build" || exit 255
 
@@ -38,6 +40,7 @@ if ! [ -f ext/dav1d ]; then
 fi
 cd ext/dav1d || exit 255
 
+rm -rf "build"
 mkdir -p "build"
 cd "build" || exit 255
 
@@ -55,6 +58,7 @@ cd ../..
 
 # START avif
 build_dir="_build-native"
+rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
 cmake -B "${build_dir}" -G Ninja \
@@ -70,9 +74,9 @@ cmake --build "${build_dir}"
 # START copy *.a & rm cache dir
 mkdir -p "../build/native"
 
-cp -v "ext/dav1d/build/src/libdav1d.a" "../build/native" || exit 255
 cp -v "ext/libyuv/build/libyuv.a" "../build/native" || exit 255
 cp -v "ext/libwebp/build/libsharpyuv.a" "../build/native" || exit 255
+cp -v "ext/dav1d/build/src/libdav1d.a" "../build/native" || exit 255
 cp -v "${build_dir}/libavif.a" "../build/native" || exit 255
 
 rm -rf "ext/dav1d/build"
