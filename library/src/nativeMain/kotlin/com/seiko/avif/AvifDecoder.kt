@@ -4,12 +4,8 @@ import kotlinx.cinterop.CValuesRef
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.convert
 import kotlinx.cinterop.get
-import kotlinx.cinterop.interpretCPointer
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.objcPtr
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.refTo
-import kotlinx.cinterop.toLong
 import platform.avif.AVIF_RESULT_OK
 import platform.avif.AVIF_TRUE
 import platform.avif.avifDecoder
@@ -66,7 +62,7 @@ actual class AvifDecoder private constructor(
     }
 
     actual fun getImageDurationMs(): Int {
-        return decoder.imageTiming.duration.toInt() * 1000 //ms
+        return decoder.imageTiming.duration.toInt() * 1000 // ms
     }
 
     actual fun close() {

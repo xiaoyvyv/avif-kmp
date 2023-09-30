@@ -80,8 +80,10 @@ kotlin {
             // https://youtrack.jetbrains.com/issue/KT-39396
             freeCompilerArgs += listOf(
                 // "-Xallocator=std",
-                "-include-binary", "$libraryPath/libdav1d.a",
-                "-include-binary", "$libraryPath/libavif.a",
+                "-include-binary",
+                "$libraryPath/libdav1d.a",
+                "-include-binary",
+                "$libraryPath/libavif.a",
             )
         }
     }
@@ -180,7 +182,7 @@ cklib {
 
                 // "-isysroot", iphoneSimSdk,
                 // "-miphoneos-version-min=12.0"
-            )
+            ),
         )
         // linkerArgs.addAll(
         //     listOf(
