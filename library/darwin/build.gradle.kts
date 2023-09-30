@@ -86,13 +86,5 @@ private val androidExtension: LibraryExtension
 private val currentOs: OperatingSystem
     get() = OperatingSystem.current()
 
-private val targetName: String
-    get() = when {
-        currentOs.isLinux -> "linux"
-        currentOs.isMacOsX -> "darwin"
-        currentOs.isWindows -> "mingw"
-        else -> error("Unsupported OS $currentOs")
-    }
-
 private val taskGroup: String
     get() = "avif"
