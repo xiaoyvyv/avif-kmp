@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <core/SkBitmap.h>
 
-#include "avif/avif.h"
+#include "../../../darwin/libavif/include/avif/avif.h"
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifImage_getFrame(JNIEnv *env, jobject type, jlong context, jlong ptr) {

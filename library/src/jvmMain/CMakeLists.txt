@@ -12,7 +12,7 @@ set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 find_package(JNI REQUIRED)
 include_directories(${JNI_INCLUDE_DIRS})
 
-set(PROJECT_WRAPPER_DIR ${CMAKE_SOURCE_DIR}/../../wrapper)
+set(PROJECT_SRC_DIR ${CMAKE_SOURCE_DIR}/../../src)
 set(PROJECT_LIB_DIR ${CMAKE_SOURCE_DIR}/../../darwin)
 
 add_library(yuv STATIC IMPORTED)
@@ -26,17 +26,15 @@ set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build
 
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
 
+# TODO: maybe remove skia header
+set(PROJECT_WRAPPER_DIR ${CMAKE_SOURCE_DIR}/../../wrapper)
 include_directories(
         ${PROJECT_WRAPPER_DIR}/skia/include
-        ${PROJECT_WRAPPER_DIR}/skia
-)
+        ${PROJECT_WRAPPER_DIR}/skia)
 
 file(GLOB_RECURSE sources
-        ${PROJECT_WRAPPER_DIR}/avifDecoderJni.cpp
-        ${PROJECT_WRAPPER_DIR}/avifImageJni.cpp
-        ${PROJECT_WRAPPER_DIR}/avifImageJvm.cpp
-)
+        ${PROJECT_SRC_DIR}/jvmMain/cpp/*.cpp
+        ${PROJECT_SRC_DIR}/jniMain/cpp/*.cpp)
 add_library(avif-jvm SHARED ${sources})
 
-#target_compile_definitions(avif-jvm PUBLIC CONFIG_VERSION="${QUICKJS_VERSION}")
 target_link_libraries(avif-jvm yuv sharpyuv dav1d avif)

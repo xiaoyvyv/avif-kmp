@@ -1,5 +1,5 @@
-#include <jni.h>
-#include <android/log.h>
+#include "../../../../../../../../Library/Android/sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/jni.h"
+#include "../../../../../../../../Library/Android/sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/android/log.h"
 
 #define LOG_TAG "avif_jni"
 

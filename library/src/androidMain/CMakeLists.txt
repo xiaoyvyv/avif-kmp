@@ -3,7 +3,7 @@ project(avif_android_jni)
 
 #add_subdirectory(${CMAKE_SOURCE_DIR}/../../darwin/libavif libavif)
 
-set(PROJECT_WRAPPER_DIR ${CMAKE_SOURCE_DIR}/../../wrapper)
+set(PROJECT_SRC_DIR ${CMAKE_SOURCE_DIR}/../../src)
 set(PROJECT_LIB_DIR ${CMAKE_SOURCE_DIR}/../../darwin)
 
 add_library(dav1d STATIC IMPORTED)
@@ -14,9 +14,8 @@ set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
 
 file(GLOB_RECURSE sources
-        ${PROJECT_WRAPPER_DIR}/avifDecoderJni.cpp
-        ${PROJECT_WRAPPER_DIR}/avifImageJni.cpp
-        ${PROJECT_WRAPPER_DIR}/avifImageAndroid.cpp)
+        ${PROJECT_SRC_DIR}/androidMain/cpp/*.cpp
+        ${PROJECT_SRC_DIR}/jniMain/cpp/*.cpp)
 add_library(avif-android SHARED ${sources})
 
 target_link_libraries(avif-android jnigraphics dav1d avif log)
