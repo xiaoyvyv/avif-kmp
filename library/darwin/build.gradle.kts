@@ -3,13 +3,6 @@
 import com.android.build.gradle.LibraryExtension
 import org.gradle.internal.os.OperatingSystem
 
-val clean by tasks.creating {
-    group = "build"
-    doLast {
-        delete(projectDir.resolve("build"))
-    }
-}
-
 val buildLibAvif by tasks.creating {
     group = taskGroup
 }
