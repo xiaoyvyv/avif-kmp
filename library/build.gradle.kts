@@ -38,6 +38,7 @@ kotlin {
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
             }
         }
+        @Suppress("UNUSED_VARIABLE")
         val skiaMain by getting {
             dependencies {
                 api("org.jetbrains.skiko:skiko:0.7.80")
@@ -54,16 +55,31 @@ kotlin {
                 includeDirs(file("darwin/libavif/include"))
 
                 extraOpts("-libraryPath", "$libraryPath")
-                // extraOpts("-libraryPath", "${layout.buildDirectory.file("cklib/avif/ios_simulator_arm64").get().asFile}")
-                // linkerOpts("${layout.buildDirectory.file("cklib/avif/ios_simulator_arm64").get().asFile}")
 
-                header(file("wrapper/common/avifImageNative.h"))
+                header(file("src/nativeMain/cpp/avifImageNative.h"))
+
+                //
+
+                // includeDirs(file("wrapper/skia"))
+
+                // compilerOpts("-x", "c++", "-std=c++14")
+
+                // extraOpts("-Xsource-compiler-option", "-std=c++11")
+
+                // extraOpts(
+                //     // "-Xsource-compiler-option", "-DONLY_C_LOCALE=1",
+                //     // "-Xsource-compiler-option", "-std=c99",
+                //     // "-Xsource-compiler-option", "-x",
+                //     // "-Xsource-compiler-option", "c++",
+                //     // "-Xsource-compiler-option", "-std=c++14",
+                //     // "-Xcompile-source", "${projectDir}/src/nativeMain/cpp/avifImageNative.cpp",
+                // )
             }
         }
         main.kotlinOptions {
             // https://youtrack.jetbrains.com/issue/KT-39396
             freeCompilerArgs += listOf(
-                // "-native-library", "${layout.buildDirectory.file("cklib/avif/ios_simulator_arm64/avif.bc").get().asFile}",
+                // "-Xallocator=std",
                 "-include-binary", "$libraryPath/libdav1d.a",
                 "-include-binary", "$libraryPath/libavif.a",
             )
@@ -87,7 +103,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildTypes {
-        @Suppress("UnstableApiUsage")
+        @Suppress("UNUSED_VARIABLE", "UnstableApiUsage")
         val release by getting {
             externalNativeBuild {
                 cmake {
@@ -120,19 +136,66 @@ cklib {
     create("avif") {
         language = Language.C
         srcDirs = project.files(
-            file("wrapper/common"),
+            file("src/nativeMain/cpp"),
         )
         headersDirs += project.files(
             file("darwin/libavif/include"),
-            file("wrapper/skia/include"),
-            file("wrapper/skia"),
+            // file("wrapper/skia-iosSim"),
         )
+
+        // val sdkRoot = "/Applications/Xcode.app/Contents/Developer/Platforms"
+        // // val iphoneOsSdk = "$sdkRoot/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+        // val iphoneSimSdk = "$sdkRoot/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+
         compilerArgs.addAll(
             listOf(
+                // "-fPIC",
+                // "-stdlib=libc++",
+                // // "-std=gnu++20",
                 // "-nostdinc++",
-                // "-Wno-unused-parameter",
-                // "-Wno-unused-function",
+                // "-nostdinc",
+                // "-DNANOSTL_PSTL",
+                "-Wno-unused-parameter",
+
+                // "-DSK_ALLOW_STATIC_GLOBAL_INITIALIZERS=1",
+                // "-DSK_FORCE_DISTANCE_FIELD_TEXT=0",
+                // "-DSK_GAMMA_APPLY_TO_A8",
+                // "-DSK_GAMMA_SRGB",
+                // "-DSK_SCALAR_TO_FLOAT_EXCLUDED",
+                // "-DSK_SUPPORT_GPU=1",
+                // "-DSK_GL",
+                // "-DSK_SHAPER_HARFBUZZ_AVAILABLE",
+                // "-DSK_UNICODE_AVAILABLE",
+                // "-DSK_SUPPORT_OPENCL=0",
+                // "-DSK_UNICODE_AVAILABLE",
+                // "-DU_DISABLE_RENAMING",
+                // "-DSK_USING_THIRD_PARTY_ICU",
+
+                // "-DSK_BUILD_FOR_IOS",
+                // "-DSK_SHAPER_CORETEXT_AVAILABLE",
+                // "-DSK_METAL",
+
+                // "-I${iphoneSimSdk}/usr/include/c++/v1",
+                // "-I${iphoneSimSdk}/usr/include",
+
+                // "-isysroot", iphoneSimSdk,
+                // "-miphoneos-version-min=12.0"
             )
         )
+        // linkerArgs.addAll(
+        //     listOf(
+        //         "-sysroot", iphoneSimSdk,
+        //         "-miphoneos-version-min=12.0",
+        //     )
+        // )
+
+        // linkerArgs.addAll(
+        //     listOf(
+        //         "-sysroot",
+        //         "${iphoneSimSdk}/usr/include/c++/v1",
+        //         // "${iphoneSimSdk}/usr/include",
+        //         // "/Applications/Xcode-15.0.0-Beta.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++"
+        //     )
+        // )
     }
 }

@@ -7,6 +7,14 @@
 
 #include "avif/avif.h"
 
-static int getImageFrame(avifImage *image, long bitmapPtr);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+avifRGBImage getImageFrame(avifImage *image);
+
+#ifdef __cplusplus
+} /* extern "C" { */
+#endif
 
 #endif //AVIF_KMP_AVIFIMAGENATIVE_H
