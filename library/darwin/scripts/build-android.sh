@@ -10,37 +10,22 @@ rm -rf "build/${ABI}"
 mkdir -p "build/${ABI}"
 cd "build/${ABI}" || exit 255
 
-get_android_arch() {
-  case ${ABI} in
-  armeabi-v7a)
-    echo "arm"
-    ;;
-  arm64-v8a)
-    echo "aarch64"
-    ;;
-  x86)
-    echo "x86"
-    ;;
-  x86_64)
-    echo "x86_64"
-    ;;
-  esac
-}
-
 android_toolchain="${ANDROID_NDK}/toolchains/llvm/prebuilt/${TOOLCHAIN}"
 android_bin="${android_toolchain}/bin"
-cross_file="../../package/crossfiles/$(get_android_arch)-android.meson"
 
 echo "build android abi: ${ABI}"
-echo "android arch: $(get_android_arch)"
-echo "android toolchains: $android_toolchain"
-echo "cross file: ${cross_file}"
+echo "android_toolchain: ${android_toolchain}"
+echo "android_cross_file: ${ANDROID_CROSS_FILE}"
 
 PATH=$PATH:${android_bin} meson setup \
   --default-library=static \
   --buildtype=release \
-  --cross-file="${cross_file}" \
+  --cross-file="${ANDROID_CROSS_FILE}" \
+  -Db_lto=false \
+  -Db_ndebug=false \
+  -Denable_asm=false \
   -Denable_tools=false \
+  -Denable_examples=false \
   -Denable_tests=false \
   ../..
 PATH=$PATH:${android_bin} ninja
@@ -68,10 +53,10 @@ cmake --build "${build_dir}"
 # END avif
 
 # START copy *.a & rm cache dir
-mkdir -p "../build/android/${ABI}"
+mkdir -p "${ANDROID_OUTPUT_DIR}"
 
-cp -v "ext/dav1d/build/${ABI}/src/libdav1d.a" "../build/android/${ABI}" || exit 255
-cp -v "${build_dir}/libavif.a" "../build/android/${ABI}" || exit 255
+cp -v ext/dav1d/build/${ABI}/src/*.a "${ANDROID_OUTPUT_DIR}" || exit 255
+cp -v ${build_dir}/*.a "${ANDROID_OUTPUT_DIR}" || exit 255
 
 rm -rf "ext/dav1d/build/${ABI}"
 rm -rf "${build_dir}"

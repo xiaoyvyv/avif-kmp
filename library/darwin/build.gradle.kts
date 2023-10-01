@@ -53,8 +53,10 @@ fun createBuildLibAvifAndroidTask(abi: String) = tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvifAndroid.dependsOn(this)
 
+    val outputDir = projectDir.resolve("build/android/$abi")
+
     inputs.files(projectDir.resolve("scripts/build-android.sh"))
-    outputs.dir(projectDir.resolve("build/android/$abi"))
+    outputs.dir(outputDir)
 
     val toolchain = when {
         currentOs.isLinux -> "linux-x86_64"
@@ -63,12 +65,22 @@ fun createBuildLibAvifAndroidTask(abi: String) = tasks.creating(Exec::class) {
         else -> error("No Android toolchain defined for this OS: $currentOs")
     }
 
+    val arch = when (abi) {
+        "arm64-v8a" -> "aarch64"
+        "armeabi-v7a" -> "arm"
+        "x86" -> "x86"
+        "x86_64" -> "x86_64"
+        else -> error("No Android arch with abi: $abi")
+    }
+
     workingDir = projectDir
 
+    environment("ANDROID_CROSS_FILE", file("crossfiles/android/$arch-android.meson"))
     environment("TOOLCHAIN", toolchain)
     environment("ABI", abi)
     environment("ANDROID_NDK", androidExtension.ndkDirectory)
     environment("ANDROID_MIN_SDK", androidExtension.defaultConfig.minSdk ?: 21)
+    environment("ANDROID_OUTPUT_DIR", outputDir)
 
     commandLine("bash", "-l", "scripts/build-android.sh")
 }
