@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
 import com.seiko.avif.AvifImage
@@ -37,9 +38,12 @@ fun App() {
 
             val painter by produceState<Painter>(EmptyPainter) {
                 val bytes = resource("test.avif").readBytes()
+                title += "isAvif=${AvifDecoder.isAvifImage(bytes)}\n"
+
                 AvifDecoder.create(bytes).use { decoder ->
                     val image = getFirstFrameImageBitmap(decoder)
-                    title = "width=${image.getWidth()}, height=${image.getHeight()}"
+                    title += "width=${image.getWidth()}, height=${image.getHeight()}\n"
+
                     image.getBitmapResult().onSuccess {
                         value = BitmapPainter(it.asImageBitmap())
                     }.onFailure {
@@ -47,7 +51,7 @@ fun App() {
                     }
                 }
             }
-            Text(title)
+            Text(title, textAlign = TextAlign.Center)
             Spacer(Modifier.height(8.dp))
             Image(
                 painter,
