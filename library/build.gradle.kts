@@ -62,8 +62,6 @@ kotlin {
 
                 extraOpts("-libraryPath", "$libraryPath")
 
-                header(file("src/nativeMain/cpp/avifImageNative.h"))
-
                 // extraOpts(
                 //     // "-Xsource-compiler-option", "-DONLY_C_LOCALE=1",
                 //     // "-Xsource-compiler-option", "-std=c99",
