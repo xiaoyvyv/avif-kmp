@@ -26,12 +26,7 @@ set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build
 
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
 include_directories(${PROJECT_SRC_DIR}/jniMain/cpp)
-
-# TODO: maybe remove skia header
-set(PROJECT_WRAPPER_DIR ${CMAKE_SOURCE_DIR}/../../wrapper)
-include_directories(
-        ${PROJECT_WRAPPER_DIR}/skia/include
-        ${PROJECT_WRAPPER_DIR}/skia)
+include_directories(skia/include skia)
 
 file(GLOB_RECURSE sources
         ${PROJECT_SRC_DIR}/jvmMain/cpp/*.cpp
