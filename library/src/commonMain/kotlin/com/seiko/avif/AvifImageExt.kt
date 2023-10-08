@@ -1,10 +1,12 @@
 package com.seiko.avif
 
-fun AvifImage.getPlatformBitmap(
+fun AvifImage.getBitmapResult(
     width: Int = getWidth(),
     height: Int = getHeight(),
-): PlatformBitmap {
+): Result<PlatformBitmap> {
     val bitmap = createPlatformBitmap(width, height)
-    getFrame(bitmap)
-    return bitmap
+    return runCatching {
+        getFrame(bitmap)
+        bitmap
+    }
 }

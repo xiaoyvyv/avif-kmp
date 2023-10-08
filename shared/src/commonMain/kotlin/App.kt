@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
 import com.seiko.avif.AvifImage
 import com.seiko.avif.PlatformBitmap
-import com.seiko.avif.getPlatformBitmap
+import com.seiko.avif.getBitmapResult
 import com.seiko.avif.use
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
@@ -40,7 +40,11 @@ fun App() {
                 AvifDecoder.create(bytes).use { decoder ->
                     val image = getFirstFrameImageBitmap(decoder)
                     title = "width=${image.getWidth()}, height=${image.getHeight()}"
-                    value = BitmapPainter(image.getPlatformBitmap().asImageBitmap())
+                    image.getBitmapResult().onSuccess {
+                        value = BitmapPainter(it.asImageBitmap())
+                    }.onFailure {
+                        println(it.message.orEmpty())
+                    }
                 }
             }
             Text(title)

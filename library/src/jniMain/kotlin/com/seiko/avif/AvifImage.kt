@@ -22,8 +22,8 @@ actual class AvifImage private constructor(
         return getDepth(context)
     }
 
-    actual fun getFrame(bitmap: PlatformBitmap): Boolean {
-        return getFrame(context, bitmap.ptr)
+    actual fun getFrame(bitmap: PlatformBitmap) {
+        getFrame(context, bitmap.ptr)
     }
 
     private external fun getWidth(context: Long): Int

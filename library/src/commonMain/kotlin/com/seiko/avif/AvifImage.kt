@@ -8,5 +8,5 @@ expect class AvifImage {
     fun getDepth(): Int
 
     // make sure AvifDecoder not close
-    fun getFrame(bitmap: PlatformBitmap): Boolean
+    fun getFrame(bitmap: PlatformBitmap)
 }
