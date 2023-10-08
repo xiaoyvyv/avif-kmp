@@ -1,7 +1,6 @@
 package com.seiko.avif
 
 import com.seiko.avif.internal.log
-import java.io.Closeable
 
 actual class AvifDecoder private constructor(
     private var context: Long,
@@ -36,10 +35,10 @@ actual class AvifDecoder private constructor(
         return getImageDurationMs(context)
     }
 
-    actual override fun close() {
+    override fun close() {
         val contextToClose = context
         if (contextToClose != 0L) {
-            context = 0
+            context = 0L
             destroyContext(contextToClose)
         }
     }

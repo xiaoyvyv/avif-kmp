@@ -1,6 +1,6 @@
 package com.seiko.avif
 
-expect class AvifDecoder {
+expect class AvifDecoder : Closeable {
     companion object {
         fun create(bytes: ByteArray): AvifDecoder
     }
@@ -12,6 +12,4 @@ expect class AvifDecoder {
     fun getImageCount(): Int
 
     fun getImageDurationMs(): Int
-
-    fun close()
 }

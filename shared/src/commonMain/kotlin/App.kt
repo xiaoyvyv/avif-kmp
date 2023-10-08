@@ -24,6 +24,7 @@ import com.seiko.avif.AvifDecoder
 import com.seiko.avif.AvifImage
 import com.seiko.avif.PlatformBitmap
 import com.seiko.avif.getPlatformBitmap
+import com.seiko.avif.use
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 
@@ -36,14 +37,11 @@ fun App() {
 
             val painter by produceState<Painter>(EmptyPainter) {
                 val bytes = resource("test.avif").readBytes()
-                val decoder = AvifDecoder.create(bytes)
-
-                val image = getFirstFrameImageBitmap(decoder)
-                title = "width=${image.getWidth()}, height=${image.getHeight()}"
-
-                value = BitmapPainter(image.getPlatformBitmap().asImageBitmap())
-
-                decoder.close()
+                AvifDecoder.create(bytes).use { decoder ->
+                    val image = getFirstFrameImageBitmap(decoder)
+                    title = "width=${image.getWidth()}, height=${image.getHeight()}"
+                    value = BitmapPainter(image.getPlatformBitmap().asImageBitmap())
+                }
             }
             Text(title)
             Spacer(Modifier.height(8.dp))
