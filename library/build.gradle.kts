@@ -1,4 +1,3 @@
-import co.touchlab.cklib.gradle.CompileToBitcode.Language
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
@@ -46,7 +45,15 @@ kotlin {
     }
     targets.withType<KotlinNativeTarget> {
         val main by compilations.getting
-        val libraryPath = file("$rootDir/library/darwin/build/ios")
+
+        val arch = when (name) {
+            "iosSimulatorArm64" -> "aarch64-sim"
+            "iosX64" -> "aarch64"
+            "iosArm64" -> "x86_64"
+            else -> error("avif not support with target: $name")
+        }
+
+        val libraryPath = file("$rootDir/library/darwin/build/ios/$arch")
         main.cinterops {
             create("avif") {
                 defFile("src/nativeMain/cinterop/avif.def")
@@ -56,14 +63,6 @@ kotlin {
                 extraOpts("-libraryPath", "$libraryPath")
 
                 header(file("src/nativeMain/cpp/avifImageNative.h"))
-
-                //
-
-                // includeDirs(file("wrapper/skia"))
-
-                // compilerOpts("-x", "c++", "-std=c++14")
-
-                // extraOpts("-Xsource-compiler-option", "-std=c++11")
 
                 // extraOpts(
                 //     // "-Xsource-compiler-option", "-DONLY_C_LOCALE=1",
@@ -78,7 +77,6 @@ kotlin {
         main.kotlinOptions {
             // https://youtrack.jetbrains.com/issue/KT-39396
             freeCompilerArgs += listOf(
-                // "-Xallocator=std",
                 "-include-binary",
                 "$libraryPath/libdav1d.a",
                 "-include-binary",

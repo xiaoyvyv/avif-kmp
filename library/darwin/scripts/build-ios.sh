@@ -1,8 +1,5 @@
 cd libavif || exit 255
 
-echo "ios_cross_file: ${IOS_CROSS_FILE}"
-echo "ios_toolchain_cmake: ${IOS_TOOLCHAIN_FILE}"
-
 # START dav1d
 if ! [ -f ext/dav1d ]; then
   git clone -b 1.2.1 --depth 1 https://code.videolan.org/videolan/dav1d.git ext/dav1d
@@ -12,6 +9,9 @@ cd ext/dav1d || exit 255
 rm -rf "build"
 mkdir "build"
 cd "build" || exit 255
+
+echo "ios_cross_file: ${IOS_CROSS_FILE}"
+echo "ios_toolchain_cmake: ${IOS_TOOLCHAIN_FILE}"
 
 meson setup \
   --cross-file="${IOS_CROSS_FILE}" \
@@ -31,7 +31,7 @@ cd ../..
 # END dav1d
 
 # START avif
-build_dir="_build-ios"
+build_dir="_build-ios_${ARCH}"
 rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
@@ -47,10 +47,10 @@ cmake --build "${build_dir}" --config Release
 # END avif
 
 # START copy *.a & rm cache dir
-mkdir -p "../build/ios"
+mkdir -p "${IOS_OUTPUT_DIR}"
 
-cp -v "ext/dav1d/build/src/libdav1d.a" "../build/ios" || exit 255
-cp -v ${build_dir}/Release-*/libavif.a "../build/ios" || exit 255
+cp -v ext/dav1d/build/src/*.a "${IOS_OUTPUT_DIR}" || exit 255
+cp -v ${build_dir}/Release-*/*.a "${IOS_OUTPUT_DIR}" || exit 255
 
 rm -rf "ext/dav1d/build"
 rm -rf "${build_dir}"
