@@ -9,6 +9,7 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.pointed
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.refTo
+import kotlinx.cinterop.toKString
 import platform.avif.AVIF_RESULT_OK
 import platform.avif.AVIF_TRUE
 import platform.avif.avifDecoder
@@ -20,6 +21,7 @@ import platform.avif.avifDecoderReset
 import platform.avif.avifDecoderSetIOMemory
 import platform.avif.avifPeekCompatibleFileType
 import platform.avif.avifROData
+import platform.avif.avifResultToString
 import platform.posix.uint8_tVar
 
 @OptIn(ExperimentalForeignApi::class)
@@ -51,12 +53,12 @@ actual class AvifDecoder private constructor(
             )
             if (result != AVIF_RESULT_OK) {
                 avifDecoderDestroy(decoderPtr)
-                throw RuntimeException("create AvifDecoder error")
+                error("Failed to set AVIF IO to a memory reader: ${avifResultToString(result)?.toKString()}.")
             }
             result = avifDecoderParse(decoderPtr)
             if (result != AVIF_RESULT_OK) {
                 avifDecoderDestroy(decoderPtr)
-                throw RuntimeException("create AvifDecoder error")
+                error("Failed to parse AVIF image: ${avifResultToString(result)?.toKString()}")
             }
             return AvifDecoder(decoderPtr)
         }

@@ -1,12 +1,13 @@
 #include <jni.h>
 
 #include "avif/avif.h"
-#include "../../androidMain/cpp/logAndroid.h"
+#include "helperJni.h"
+
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifDecoder_isAvifImage(JNIEnv *env, jclass type,
-                                              jbyteArray byteArray,
-                                              jint length) {
+                                            jbyteArray byteArray,
+                                            jint length) {
     jbyte *buf = env->GetByteArrayElements(byteArray, nullptr);
     const avifROData avif = {(const uint8_t *) buf, static_cast<size_t>(length)};
     return avifPeekCompatibleFileType(&avif);
@@ -34,12 +35,14 @@ Java_com_seiko_avif_AvifDecoder_createContext(JNIEnv *env, jclass type,
     jbyte *buf = env->GetByteArrayElements(byteArray, nullptr);
     avifResult result = avifDecoderSetIOMemory(decoder, (const uint8_t *) buf, length);
     if (result != AVIF_RESULT_OK) {
-        ALOGE("Failed to set AVIF IO to a memory reader.");
+        throwIllegalStateException(env, "Failed to set AVIF IO to a memory reader: %s.",
+                                   avifResultToString(result));
         goto cleanup;
     }
     result = avifDecoderParse(decoder);
     if (result != AVIF_RESULT_OK) {
-        ALOGE("Failed to parse AVIF image: %s.", avifResultToString(result));
+        throwIllegalStateException(env, "Failed to parse AVIF image: %s.",
+                                   avifResultToString(result));
         goto cleanup;
     }
     return reinterpret_cast<jlong>(decoder);
@@ -51,54 +54,54 @@ Java_com_seiko_avif_AvifDecoder_createContext(JNIEnv *env, jclass type,
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_seiko_avif_AvifDecoder_destroyContext(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     avifDecoderDestroy(decoder);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifDecoder_reset(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return avifDecoderReset(decoder) == AVIF_RESULT_OK;
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifDecoder_nextImage(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return avifDecoderNextImage(decoder) == AVIF_RESULT_OK;
 }
 
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_seiko_avif_AvifDecoder_getFrame(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return reinterpret_cast<jlong>(decoder->image);
 }
 
 extern "C" JNIEXPORT jint JNICALL
 Java_com_seiko_avif_AvifDecoder_getFrameIndex(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return decoder->imageIndex;
 }
 
 extern "C" JNIEXPORT jint JNICALL
 Java_com_seiko_avif_AvifDecoder_getFrameCount(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return decoder->imageCount;
 }
 
 extern "C" JNIEXPORT jint JNICALL
 Java_com_seiko_avif_AvifDecoder_getFrameDurationMs(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return decoder->imageTiming.duration * 1000; //ms
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifDecoder_getAlphaPresent(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return decoder->alphaPresent;
 }
 
 extern "C" JNIEXPORT jint JNICALL
 Java_com_seiko_avif_AvifDecoder_getRepetitionCount(JNIEnv *env, jobject type, jlong context) {
-    avifDecoder *decoder = reinterpret_cast<avifDecoder*>(context);
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
     return decoder->repetitionCount;
 }

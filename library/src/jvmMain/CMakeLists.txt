@@ -25,6 +25,7 @@ set_target_properties(dav1d PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/buil
 set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build/native/libavif.a)
 
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
+include_directories(${PROJECT_SRC_DIR}/jniMain/cpp)
 
 # TODO: maybe remove skia header
 set(PROJECT_WRAPPER_DIR ${CMAKE_SOURCE_DIR}/../../wrapper)

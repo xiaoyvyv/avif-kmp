@@ -12,6 +12,7 @@ set_target_properties(dav1d PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/buil
 set_target_properties(avif PROPERTIES IMPORTED_LOCATION ${PROJECT_LIB_DIR}/build/android/${ANDROID_ABI}/libavif.a)
 
 include_directories(${PROJECT_LIB_DIR}/libavif/include)
+include_directories(${PROJECT_SRC_DIR}/jniMain/cpp)
 
 file(GLOB_RECURSE sources
         ${PROJECT_SRC_DIR}/androidMain/cpp/*.cpp

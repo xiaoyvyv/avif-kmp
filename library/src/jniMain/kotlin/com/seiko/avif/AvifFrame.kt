@@ -22,5 +22,5 @@ actual class AvifFrame internal constructor(
     private external fun getWidth(context: Long): Int
     private external fun getHeight(context: Long): Int
     private external fun getDepth(context: Long): Int
-    private external fun decodeFrame(context: Long, bitmap: PlatformBitmapPtr): Boolean
+    private external fun decodeFrame(context: Long, bitmap: PlatformBitmapPtr): Int
 }
