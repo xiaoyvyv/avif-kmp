@@ -2,6 +2,15 @@
 
 #include "avif/avif.h"
 
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_seiko_avif_AvifDecoder_isAvifImage(JNIEnv *env, jclass type,
+                                              jbyteArray byteArray,
+                                              jint length) {
+    jbyte *buf = env->GetByteArrayElements(byteArray, nullptr);
+    const avifROData avif = {(const uint8_t *) buf, static_cast<size_t>(length)};
+    return avifPeekCompatibleFileType(&avif);
+}
+
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_seiko_avif_AvifDecoder_createContext(JNIEnv *env, jclass type,
                                               jbyteArray byteArray,

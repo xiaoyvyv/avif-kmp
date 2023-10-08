@@ -10,10 +10,17 @@ actual class AvifDecoder private constructor(
             loadNativeLibrary()
         }
 
+        actual fun isAvifImage(bytes: ByteArray): Boolean {
+            return isAvifImage(bytes, bytes.size)
+        }
+
         @JvmStatic
         actual fun create(bytes: ByteArray): AvifDecoder {
             return AvifDecoder(createContext(bytes, bytes.size))
         }
+
+        @JvmStatic
+        external fun isAvifImage(bytes: ByteArray, length: Int): Boolean
 
         @JvmStatic
         external fun createContext(bytes: ByteArray, length: Int): Long
