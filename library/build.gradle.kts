@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("co.touchlab.cklib")
 }
 
 kotlin {
@@ -131,73 +130,4 @@ val buildLibAvifNativeKLib by tasks.creating(Exec::class) {
     workingDir = projectDir
 
     commandLine("bash", "-l", "build-jvm-klib.sh")
-}
-
-cklib {
-    config.kotlinVersion = extra["kotlin.version"] as String
-    create("avif") {
-        language = Language.C
-        srcDirs = project.files(
-            file("src/nativeMain/cpp"),
-        )
-        headersDirs += project.files(
-            file("darwin/libavif/include"),
-            // file("wrapper/skia-iosSim"),
-        )
-
-        // val sdkRoot = "/Applications/Xcode.app/Contents/Developer/Platforms"
-        // // val iphoneOsSdk = "$sdkRoot/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
-        // val iphoneSimSdk = "$sdkRoot/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
-
-        compilerArgs.addAll(
-            listOf(
-                // "-fPIC",
-                // "-stdlib=libc++",
-                // // "-std=gnu++20",
-                // "-nostdinc++",
-                // "-nostdinc",
-                // "-DNANOSTL_PSTL",
-                "-Wno-unused-parameter",
-
-                // "-DSK_ALLOW_STATIC_GLOBAL_INITIALIZERS=1",
-                // "-DSK_FORCE_DISTANCE_FIELD_TEXT=0",
-                // "-DSK_GAMMA_APPLY_TO_A8",
-                // "-DSK_GAMMA_SRGB",
-                // "-DSK_SCALAR_TO_FLOAT_EXCLUDED",
-                // "-DSK_SUPPORT_GPU=1",
-                // "-DSK_GL",
-                // "-DSK_SHAPER_HARFBUZZ_AVAILABLE",
-                // "-DSK_UNICODE_AVAILABLE",
-                // "-DSK_SUPPORT_OPENCL=0",
-                // "-DSK_UNICODE_AVAILABLE",
-                // "-DU_DISABLE_RENAMING",
-                // "-DSK_USING_THIRD_PARTY_ICU",
-
-                // "-DSK_BUILD_FOR_IOS",
-                // "-DSK_SHAPER_CORETEXT_AVAILABLE",
-                // "-DSK_METAL",
-
-                // "-I${iphoneSimSdk}/usr/include/c++/v1",
-                // "-I${iphoneSimSdk}/usr/include",
-
-                // "-isysroot", iphoneSimSdk,
-                // "-miphoneos-version-min=12.0"
-            ),
-        )
-        // linkerArgs.addAll(
-        //     listOf(
-        //         "-sysroot", iphoneSimSdk,
-        //         "-miphoneos-version-min=12.0",
-        //     )
-        // )
-
-        // linkerArgs.addAll(
-        //     listOf(
-        //         "-sysroot",
-        //         "${iphoneSimSdk}/usr/include/c++/v1",
-        //         // "${iphoneSimSdk}/usr/include",
-        //         // "/Applications/Xcode-15.0.0-Beta.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++"
-        //     )
-        // )
-    }
 }

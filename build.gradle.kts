@@ -5,7 +5,6 @@ plugins {
     id("com.android.application").apply(false)
     id("com.android.library").apply(false)
     id("org.jetbrains.compose").apply(false)
-    id("co.touchlab.cklib").apply(false)
     id("com.diffplug.spotless")
 }
 
