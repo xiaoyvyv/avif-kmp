@@ -15,31 +15,48 @@ actual class AvifDecoder private constructor(
         }
 
         @JvmStatic
-        actual fun create(bytes: ByteArray): AvifDecoder {
-            return AvifDecoder(createContext(bytes, bytes.size))
+        actual fun create(bytes: ByteArray, threads: Int): AvifDecoder {
+            val context = createContext(bytes, bytes.size, threads)
+            return AvifDecoder(context)
         }
 
         @JvmStatic
         external fun isAvifImage(bytes: ByteArray, length: Int): Boolean
 
         @JvmStatic
-        external fun createContext(bytes: ByteArray, length: Int): Long
+        external fun createContext(bytes: ByteArray, length: Int, threads: Int): Long
     }
 
-    actual fun nextImage(): Boolean {
+    actual fun reset(): Boolean {
+        return reset(context)
+    }
+
+    actual fun nextFrame(): Boolean {
         return nextImage(context)
     }
 
-    actual fun getImage(): AvifImage {
-        return AvifImage.create(getImage(context))
+    actual fun getFrame(): AvifFrame {
+        return AvifFrame(getFrame(context))
     }
 
-    actual fun getImageCount(): Int {
-        return getImageCount(context)
+    actual fun getFrameIndex(): Int {
+        return getFrameIndex(context)
     }
 
-    actual fun getImageDurationMs(): Int {
-        return getImageDurationMs(context)
+    actual fun getFrameDurationMs(): Int {
+        return getFrameDurationMs(context)
+    }
+
+    actual fun getFrameCount(): Int {
+        return getFrameCount(context)
+    }
+
+    actual fun getAlphaPresent(): Boolean {
+        return getAlphaPresent(context)
+    }
+
+    actual fun getRepetitionCount(): Int {
+        return getRepetitionCount(context)
     }
 
     override fun close() {
@@ -55,10 +72,13 @@ actual class AvifDecoder private constructor(
             log("warn") { "AvifDecoder($context) leaked!" }
         }
     }
-
+    private external fun reset(context: Long): Boolean
     private external fun nextImage(context: Long): Boolean
-    private external fun getImage(context: Long): Long
-    private external fun getImageCount(context: Long): Int
-    private external fun getImageDurationMs(context: Long): Int
+    private external fun getFrame(context: Long): Long
+    private external fun getFrameIndex(context: Long): Int
+    private external fun getFrameCount(context: Long): Int
+    private external fun getFrameDurationMs(context: Long): Int
+    private external fun getAlphaPresent(context: Long): Boolean
+    private external fun getRepetitionCount(context: Long): Int
     private external fun destroyContext(context: Long)
 }

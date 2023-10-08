@@ -8,14 +8,50 @@ expect class AvifDecoder : Closeable {
          */
         fun isAvifImage(bytes: ByteArray): Boolean
 
-        fun create(bytes: ByteArray): AvifDecoder
+        /**
+         * Create and return an AvifDecoder.
+         */
+        fun create(bytes: ByteArray, threads: Int = 1): AvifDecoder
     }
 
-    fun nextImage(): Boolean
+    /**
+     * Reset decode
+     */
+    fun reset(): Boolean
 
-    fun getImage(): AvifImage
+    /**
+     * Decode next frame.
+     */
+    fun nextFrame(): Boolean
 
-    fun getImageCount(): Int
+    /**
+     * Get current frame in the image.
+     */
+    fun getFrame(): AvifFrame
 
-    fun getImageDurationMs(): Int
+    /**
+     * Get current frame index in the image.
+     */
+    fun getFrameIndex(): Int
+
+    /**
+     * Get current frame duration in the image.
+     */
+    fun getFrameDurationMs(): Int
+
+    /**
+     * Get the number of frames in the image.
+     */
+    fun getFrameCount(): Int
+
+    /**
+     * Returns true if the image contains a transparency/alpha channel, false otherwise.
+     */
+    fun getAlphaPresent(): Boolean
+
+    /**
+     * Get the number of repetitions for an animated image (see repetitionCount in avif.h for
+     * details).
+     */
+    fun getRepetitionCount(): Int
 }

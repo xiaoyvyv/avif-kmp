@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
-import com.seiko.avif.AvifImage
+import com.seiko.avif.AvifFrame
 import com.seiko.avif.PlatformBitmap
 import com.seiko.avif.getBitmapResult
 import com.seiko.avif.use
@@ -41,10 +41,10 @@ fun App() {
                 title += "isAvif=${AvifDecoder.isAvifImage(bytes)}\n"
 
                 AvifDecoder.create(bytes).use { decoder ->
-                    val image = getFirstFrameImageBitmap(decoder)
-                    title += "width=${image.getWidth()}, height=${image.getHeight()}\n"
+                    val frame = getFirstFrame(decoder)
+                    title += "width=${frame.getWidth()}, height=${frame.getHeight()}\n"
 
-                    image.getBitmapResult().onSuccess {
+                    frame.getBitmapResult().onSuccess {
                         value = BitmapPainter(it.asImageBitmap())
                     }.onFailure {
                         println(it.message.orEmpty())
@@ -67,9 +67,9 @@ private object EmptyPainter : Painter() {
     override fun DrawScope.onDraw() = Unit
 }
 
-private fun getFirstFrameImageBitmap(decoder: AvifDecoder): AvifImage {
-    decoder.nextImage()
-    return decoder.getImage()
+private fun getFirstFrame(decoder: AvifDecoder): AvifFrame {
+    decoder.nextFrame()
+    return decoder.getFrame()
 }
 
 internal expect fun PlatformBitmap.asImageBitmap(): ImageBitmap

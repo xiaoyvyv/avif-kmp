@@ -17,15 +17,9 @@ import platform.avif.avifRGBImageFreePixels
 import platform.avif.avifRGBImageSetDefaults
 import platform.avif.avifResultToString
 
-actual class AvifImage private constructor(
+actual class AvifFrame internal constructor(
     private val avifImagePtr: CPointer<avifImage>,
 ) {
-    companion object {
-        fun create(avifImagePtr: CPointer<avifImage>): AvifImage {
-            return AvifImage(avifImagePtr)
-        }
-    }
-
     private val avifImage: avifImage
         get() = avifImagePtr.pointed
 
@@ -41,7 +35,7 @@ actual class AvifImage private constructor(
         return avifImage.depth.toInt()
     }
 
-    actual fun getFrame(bitmap: PlatformBitmap) = memScoped {
+    actual fun decodeFrame(bitmap: PlatformBitmap) = memScoped {
         val rgbImage = alloc<avifRGBImage>()
         avifRGBImageSetDefaults(rgbImage.ptr, avifImagePtr)
 

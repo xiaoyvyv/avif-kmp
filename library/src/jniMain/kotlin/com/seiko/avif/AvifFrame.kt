@@ -1,15 +1,8 @@
 package com.seiko.avif
 
-actual class AvifImage private constructor(
+actual class AvifFrame internal constructor(
     private var context: Long,
 ) {
-
-    companion object {
-        fun create(context: Long): AvifImage {
-            return AvifImage(context)
-        }
-    }
-
     actual fun getWidth(): Int {
         return getWidth(context)
     }
@@ -22,12 +15,12 @@ actual class AvifImage private constructor(
         return getDepth(context)
     }
 
-    actual fun getFrame(bitmap: PlatformBitmap) {
-        getFrame(context, bitmap.ptr)
+    actual fun decodeFrame(bitmap: PlatformBitmap) {
+        decodeFrame(context, bitmap.ptr)
     }
 
     private external fun getWidth(context: Long): Int
     private external fun getHeight(context: Long): Int
     private external fun getDepth(context: Long): Int
-    private external fun getFrame(context: Long, bitmap: PlatformBitmapPtr): Boolean
+    private external fun decodeFrame(context: Long, bitmap: PlatformBitmapPtr): Boolean
 }

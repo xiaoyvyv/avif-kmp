@@ -6,8 +6,8 @@
 #include "logAndroid.h"
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_seiko_avif_AvifImage_getFrame(JNIEnv *env, jobject type,
-                                       jlong context, jobject bitmap) {
+Java_com_seiko_avif_AvifFrame_decodeFrame(JNIEnv *env, jobject type,
+                                          jlong context, jobject bitmap) {
     avifImage *image = reinterpret_cast<avifImage*>(context);
 
     AndroidBitmapInfo bitmap_info;

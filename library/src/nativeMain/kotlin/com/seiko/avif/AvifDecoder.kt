@@ -16,6 +16,7 @@ import platform.avif.avifDecoderCreate
 import platform.avif.avifDecoderDestroy
 import platform.avif.avifDecoderNextImage
 import platform.avif.avifDecoderParse
+import platform.avif.avifDecoderReset
 import platform.avif.avifDecoderSetIOMemory
 import platform.avif.avifPeekCompatibleFileType
 import platform.avif.avifROData
@@ -36,10 +37,10 @@ actual class AvifDecoder private constructor(
         }
 
         @Suppress("UNCHECKED_CAST")
-        actual fun create(bytes: ByteArray): AvifDecoder = memScoped {
+        actual fun create(bytes: ByteArray, threads: Int): AvifDecoder = memScoped {
             val decoderPtr = requireNotNull(avifDecoderCreate())
             with(decoderPtr.pointed) {
-                maxThreads = 1
+                maxThreads = threads
                 ignoreExif = AVIF_TRUE
                 ignoreXMP = AVIF_TRUE
             }
@@ -64,21 +65,37 @@ actual class AvifDecoder private constructor(
     private val decoder: avifDecoder
         get() = decoderPtr.pointed
 
-    actual fun nextImage(): Boolean {
+    actual fun reset(): Boolean {
+        return avifDecoderReset(decoderPtr) == AVIF_RESULT_OK
+    }
+
+    actual fun nextFrame(): Boolean {
         return avifDecoderNextImage(decoderPtr) == AVIF_RESULT_OK
     }
 
-    actual fun getImage(): AvifImage {
+    actual fun getFrame(): AvifFrame {
         val avifImagePtr = requireNotNull(decoder.image)
-        return AvifImage.create(avifImagePtr)
+        return AvifFrame(avifImagePtr)
     }
 
-    actual fun getImageCount(): Int {
+    actual fun getFrameIndex(): Int {
+        return decoder.imageIndex
+    }
+
+    actual fun getFrameDurationMs(): Int {
+        return decoder.imageTiming.duration.toInt() * 1000 // ms
+    }
+
+    actual fun getFrameCount(): Int {
         return decoder.imageCount
     }
 
-    actual fun getImageDurationMs(): Int {
-        return decoder.imageTiming.duration.toInt() * 1000 // ms
+    actual fun getAlphaPresent(): Boolean {
+        return decoder.alphaPresent == AVIF_TRUE
+    }
+
+    actual fun getRepetitionCount(): Int {
+        return decoder.repetitionCount
     }
 
     override fun close() {
