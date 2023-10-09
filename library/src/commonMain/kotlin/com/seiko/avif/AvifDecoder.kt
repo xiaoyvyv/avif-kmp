@@ -20,6 +20,11 @@ expect class AvifDecoder : Closeable {
     fun reset(): Boolean
 
     /**
+     * Decode index frame.
+     */
+    fun nthFrame(index: Int): Boolean
+
+    /**
      * Decode next frame.
      */
     fun nextFrame(): Boolean
@@ -54,4 +59,8 @@ expect class AvifDecoder : Closeable {
      * details).
      */
     fun getRepetitionCount(): Int
+}
+
+fun AvifDecoder.hasNext(): Boolean {
+    return getFrameIndex() < getFrameCount() - 1
 }

@@ -65,9 +65,17 @@ Java_com_seiko_avif_AvifDecoder_reset(JNIEnv *env, jobject type, jlong context) 
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
+Java_com_seiko_avif_AvifDecoder_nthFrame(JNIEnv *env, jobject type, jlong context, jint index) {
+    avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
+    avifResult result = avifDecoderNthImage(decoder, index);
+    return result == AVIF_RESULT_OK;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifDecoder_nextFrame(JNIEnv *env, jobject type, jlong context) {
     avifDecoder *decoder = reinterpret_cast<avifDecoder *>(context);
-    return avifDecoderNextImage(decoder) == AVIF_RESULT_OK;
+    avifResult result = avifDecoderNextImage(decoder);
+    return result == AVIF_RESULT_OK;
 }
 
 extern "C" JNIEXPORT jlong JNICALL

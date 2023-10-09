@@ -31,6 +31,10 @@ actual class AvifDecoder private constructor(
         return reset(context)
     }
 
+    actual fun nthFrame(index: Int): Boolean {
+        return nthFrame(context, index)
+    }
+
     actual fun nextFrame(): Boolean {
         return nextFrame(context)
     }
@@ -74,6 +78,7 @@ actual class AvifDecoder private constructor(
     }
 
     private external fun reset(context: Long): Boolean
+    private external fun nthFrame(context: Long, index: Int): Boolean
     private external fun nextFrame(context: Long): Boolean
     private external fun getFrame(context: Long): Long
     private external fun getFrameIndex(context: Long): Int

@@ -16,6 +16,7 @@ import platform.avif.avifDecoder
 import platform.avif.avifDecoderCreate
 import platform.avif.avifDecoderDestroy
 import platform.avif.avifDecoderNextImage
+import platform.avif.avifDecoderNthImage
 import platform.avif.avifDecoderParse
 import platform.avif.avifDecoderReset
 import platform.avif.avifDecoderSetIOMemory
@@ -69,6 +70,10 @@ actual class AvifDecoder private constructor(
 
     actual fun reset(): Boolean {
         return avifDecoderReset(decoderPtr) == AVIF_RESULT_OK
+    }
+
+    actual fun nthFrame(index: Int): Boolean {
+        return avifDecoderNthImage(decoderPtr, index.toUInt()) == AVIF_RESULT_OK
     }
 
     actual fun nextFrame(): Boolean {
