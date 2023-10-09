@@ -79,8 +79,8 @@ cp -v "ext/libwebp/build/libsharpyuv.a" "../build/native" || exit 255
 cp -v "ext/dav1d/build/src/libdav1d.a" "../build/native" || exit 255
 cp -v "${build_dir}/libavif.a" "../build/native" || exit 255
 
-rm -rf "ext/dav1d/build"
 rm -rf "ext/libyuv/build"
 rm -rf "ext/libwebp/build"
+rm -rf "ext/dav1d/build"
 rm -rf "${build_dir}"
 # END copy *.a & rm cache dir
