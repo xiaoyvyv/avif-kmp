@@ -22,54 +22,103 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
-import com.seiko.avif.AvifFrame
 import com.seiko.avif.PlatformBitmap
+import com.seiko.avif.createPlatformBitmap
 import com.seiko.avif.getBitmapResult
 import com.seiko.avif.use
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
     MaterialTheme {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            var title by remember { mutableStateOf("") }
-
-            val painter by produceState<Painter>(EmptyPainter) {
+            var title1 by remember { mutableStateOf("") }
+            Text(title1, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(8.dp))
+            val painter1 by produceState<Painter>(EmptyPainter) {
                 val bytes = resource("test.avif").readBytes()
-                title += "isAvif=${AvifDecoder.isAvifImage(bytes)}\n"
+                title1 += "isAvif=${AvifDecoder.isAvifImage(bytes)}\n"
 
                 AvifDecoder.create(bytes).use { decoder ->
-                    val frame = getFirstFrame(decoder)
-                    title += "width=${frame.getWidth()}, height=${frame.getHeight()}\n"
+                    decoder.nextFrame()
 
-                    frame.getBitmapResult().onSuccess {
-                        value = BitmapPainter(it.asImageBitmap())
-                    }.onFailure {
-                        println(it.message.orEmpty())
+                    val frame = decoder.getFrame()
+                    title1 += "width=${frame.getWidth()}, height=${frame.getHeight()}"
+
+                    frame.getBitmapResult()
+                        .onSuccess {
+                            value = BitmapPainter(it.asImageBitmap())
+                        }.onFailure {
+                            println(it.message.orEmpty())
+                        }
+                }
+            }
+            Image(
+                painter1,
+                contentDescription = null,
+                modifier = Modifier.size(200.dp),
+            )
+            Spacer(Modifier.height(8.dp))
+            var title2 by remember { mutableStateOf("") }
+            var durationText by remember { mutableStateOf("") }
+            Text(title2, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(8.dp))
+            val painter2 by produceState<Painter>(EmptyPainter) {
+                withContext(Dispatchers.Default) {
+                    val bytes = resource("test_anime.avif").readBytes()
+                    title2 += "isAvif=${AvifDecoder.isAvifImage(bytes)}\n"
+
+                    AvifDecoder.create(bytes).use { decoder ->
+                        title2 += "count=${decoder.getFrameCount()}\n"
+
+                        var bitmap: PlatformBitmap? = null
+
+                        decoder.nextFrame()
+                        // TODO: fix decode failure of avif anime after play 80~100 frames (Decoding of color planes failed avif)
+                        // while (decoder.nextFrame()) {
+                        val frame = decoder.getFrame()
+
+                        if (bitmap == null) {
+                            bitmap = frame.createPlatformBitmap()
+                        }
+
+                        frame.decodeFrame(bitmap)
+                        value = BitmapPainter(bitmap.asImageBitmap())
+
+                        durationText = "index=${decoder.getFrameIndex()}, " +
+                            "duration=${decoder.getFrameDurationMs()}ms\n" +
+                            "width=${frame.getWidth()}, height=${frame.getHeight()}"
+
+                        delay(decoder.getFrameDurationMs().milliseconds)
+
+                        //     if (!decoder.hasNext()) {
+                        //         decoder.reset()
+                        //     }
+                        // }
+                        println("finish")
                     }
                 }
             }
-            Text(title, textAlign = TextAlign.Center)
-            Spacer(Modifier.height(8.dp))
             Image(
-                painter,
-                null,
-                Modifier.size(200.dp),
+                painter2,
+                contentDescription = null,
+                modifier = Modifier.size(200.dp),
             )
+            Spacer(Modifier.height(8.dp))
+            Text(durationText, textAlign = TextAlign.Center)
         }
     }
 }
 
-private object EmptyPainter : Painter() {
+object EmptyPainter : Painter() {
     override val intrinsicSize get() = Size.Unspecified
     override fun DrawScope.onDraw() = Unit
-}
-
-private fun getFirstFrame(decoder: AvifDecoder): AvifFrame {
-    decoder.nextFrame()
-    return decoder.getFrame()
 }
 
 internal expect fun PlatformBitmap.asImageBitmap(): ImageBitmap
