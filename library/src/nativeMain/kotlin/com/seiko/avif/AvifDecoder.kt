@@ -85,7 +85,7 @@ actual class AvifDecoder private constructor(
     }
 
     actual fun getFrameDurationMs(): Int {
-        return decoder.imageTiming.duration.toInt() * 1000 // ms
+        return (decoder.imageTiming.duration * 1000).toInt() // ms
     }
 
     actual fun getFrameCount(): Int {
