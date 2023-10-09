@@ -32,7 +32,7 @@ actual class AvifDecoder private constructor(
     }
 
     actual fun nextFrame(): Boolean {
-        return nextImage(context)
+        return nextFrame(context)
     }
 
     actual fun getFrame(): AvifFrame {
@@ -72,8 +72,9 @@ actual class AvifDecoder private constructor(
             log("warn") { "AvifDecoder($context) leaked!" }
         }
     }
+
     private external fun reset(context: Long): Boolean
-    private external fun nextImage(context: Long): Boolean
+    private external fun nextFrame(context: Long): Boolean
     private external fun getFrame(context: Long): Long
     private external fun getFrameIndex(context: Long): Int
     private external fun getFrameCount(context: Long): Int
