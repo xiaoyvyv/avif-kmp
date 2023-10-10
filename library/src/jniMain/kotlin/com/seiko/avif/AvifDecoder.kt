@@ -1,7 +1,5 @@
 package com.seiko.avif
 
-import com.seiko.avif.internal.log
-
 actual class AvifDecoder private constructor(
     private var context: Long,
 ) : Closeable {
@@ -76,7 +74,7 @@ actual class AvifDecoder private constructor(
 
     protected fun finalize() {
         if (context != 0L) {
-            log("warn") { "AvifDecoder($context) leaked!" }
+            println("AvifDecoder($context) leaked!")
         }
     }
 
