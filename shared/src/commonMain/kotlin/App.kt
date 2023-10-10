@@ -38,6 +38,9 @@ import kotlin.time.Duration.Companion.milliseconds
 fun App() {
     MaterialTheme {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(AvifDecoder.versionString(), textAlign = TextAlign.Center)
+            Spacer(Modifier.height(8.dp))
+
             var title1 by remember { mutableStateOf("") }
             Text(title1, textAlign = TextAlign.Center)
             Spacer(Modifier.height(8.dp))
