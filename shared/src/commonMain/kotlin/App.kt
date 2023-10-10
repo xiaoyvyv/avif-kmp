@@ -79,29 +79,23 @@ fun App() {
 
                         var bitmap: PlatformBitmap? = null
 
-                        decoder.nextFrame()
-                        // TODO: fix decode failure of avif anime after play 80~100 frames (Decoding of color planes failed avif)
-                        // while (decoder.nextFrame()) {
-                        val frame = decoder.getFrame()
+                        // TODO: fix decode failure of avif anime after play 80~100 frames on android (Decoding of color planes failed avif)
+                        while (decoder.nextFrame() || decoder.nthFrame(0)) {
+                            val frame = decoder.getFrame()
 
-                        if (bitmap == null) {
-                            bitmap = frame.createPlatformBitmap()
+                            if (bitmap == null) {
+                                bitmap = frame.createPlatformBitmap()
+                            }
+
+                            frame.decodeFrame(bitmap)
+                            value = BitmapPainter(bitmap.asImageBitmap())
+
+                            durationText = "index=${decoder.getFrameIndex()}, " +
+                                "duration=${decoder.getFrameDurationMs()}ms\n" +
+                                "width=${frame.getWidth()}, height=${frame.getHeight()}"
+
+                            delay(decoder.getFrameDurationMs().milliseconds)
                         }
-
-                        frame.decodeFrame(bitmap)
-                        value = BitmapPainter(bitmap.asImageBitmap())
-
-                        durationText = "index=${decoder.getFrameIndex()}, " +
-                            "duration=${decoder.getFrameDurationMs()}ms\n" +
-                            "width=${frame.getWidth()}, height=${frame.getHeight()}"
-
-                        delay(decoder.getFrameDurationMs().milliseconds)
-
-                        //     if (!decoder.hasNext()) {
-                        //         decoder.reset()
-                        //     }
-                        // }
-                        println("finish")
                     }
                 }
             }
