@@ -12,6 +12,12 @@ expect class AvifDecoder : Closeable {
          * Create and return an AvifDecoder.
          */
         fun create(bytes: ByteArray, threads: Int = 1): AvifDecoder
+
+        /**
+         * Returns a String that contains information about the libavif version, underlying codecs and
+         * libyuv version (if available).
+         */
+        fun versionString(): String
     }
 
     /**

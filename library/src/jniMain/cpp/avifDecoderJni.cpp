@@ -1,8 +1,29 @@
 #include <jni.h>
+#include <iostream>
 
 #include "avif/avif.h"
 #include "helperJni.h"
 
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_seiko_avif_AvifDecoder_versionString(JNIEnv *env, jclass type) {
+    char codec_versions[256];
+    avifCodecVersions(codec_versions);
+
+    char libyuv_version[64];
+    if (avifLibYUVVersion() > 0) {
+        sprintf(libyuv_version, "%u",avifLibYUVVersion());
+    } else {
+        libyuv_version[0] = '\0';
+    }
+
+    char version_string[512];
+    snprintf(version_string, sizeof(version_string),
+             "libavif: %s\nCodecs: %s\nlibyuv: %s",
+             avifVersion(),
+             codec_versions,
+             libyuv_version);
+    return env->NewStringUTF(version_string);
+}
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_seiko_avif_AvifDecoder_isAvifImage(JNIEnv *env, jclass type,

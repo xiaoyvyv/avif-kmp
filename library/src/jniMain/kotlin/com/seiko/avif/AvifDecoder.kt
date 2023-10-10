@@ -21,6 +21,9 @@ actual class AvifDecoder private constructor(
         }
 
         @JvmStatic
+        actual external fun versionString(): String
+
+        @JvmStatic
         external fun isAvifImage(bytes: ByteArray, length: Int): Boolean
 
         @JvmStatic
