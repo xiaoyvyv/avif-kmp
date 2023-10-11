@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew :avif:darwin:buildLibAvifNative
 
       - name: build libavif-jvm
-        run: ./gradlew :avif:buildLibAvifNativeKLib
+        run: ./gradlew :avif:buildLibAvifNativeKLib -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
 
       - uses: actions/upload-artifact@v3
         with:
