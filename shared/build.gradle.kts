@@ -31,7 +31,7 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                api(project(":avif"))
+                api(projects.avifCompose)
             }
         }
         val androidMain by getting {

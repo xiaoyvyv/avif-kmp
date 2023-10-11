@@ -6,9 +6,6 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
-group = "io.github.qdsfdhvh"
-version = "0.0.1"
-
 kotlin {
     androidTarget()
     jvm()

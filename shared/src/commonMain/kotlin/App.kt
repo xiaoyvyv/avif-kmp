@@ -15,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
@@ -23,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seiko.avif.AvifDecoder
 import com.seiko.avif.PlatformBitmap
+import com.seiko.avif.compose.asImageBitmap
 import com.seiko.avif.createPlatformBitmap
 import com.seiko.avif.getBitmapResult
 import com.seiko.avif.use
@@ -117,5 +117,3 @@ object EmptyPainter : Painter() {
     override val intrinsicSize get() = Size.Unspecified
     override fun DrawScope.onDraw() = Unit
 }
-
-internal expect fun PlatformBitmap.asImageBitmap(): ImageBitmap

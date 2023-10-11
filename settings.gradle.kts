@@ -3,8 +3,9 @@ rootProject.name = "avif-kmp"
 include(":androidApp")
 include(":desktopApp")
 include(":shared")
-include(":avif")
 include(":avif:darwin")
+include(":avif")
+include(":avif-compose")
 
 pluginManagement {
     repositories {
@@ -42,3 +43,5 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

@@ -26,6 +26,8 @@ subprojects {
             ktlint(ktlintVersion)
         }
     }
+    group = "io.github.qdsfdhvh"
+    version = "0.0.1"
     plugins.withId("com.vanniktech.maven.publish.base") {
         mavenPublishing {
             publishToMavenCentral(SonatypeHost.S01)
