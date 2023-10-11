@@ -32,6 +32,7 @@ jobs:
           java-version: 20
 
       - name: build libavif
+        uses: seanmiddleditch/gha-setup-ninja@master
         run: ./gradlew :avif:darwin:buildLibAvifNative
 
       - name: build libavif-jvm
