@@ -3,7 +3,11 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
+
+group = "io.github.qdsfdhvh"
+version = "0.0.1"
 
 kotlin {
     androidTarget()

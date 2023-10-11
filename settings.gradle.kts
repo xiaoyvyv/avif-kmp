@@ -19,6 +19,7 @@ pluginManagement {
         val agpVersion = extra["agp.version"] as String
         val composeVersion = extra["compose.version"] as String
         val spotlessVersion = extra["spotless.version"] as String
+        val publishVersion = extra["publish.version"] as String
 
         kotlin("jvm").version(kotlinVersion)
         kotlin("multiplatform").version(kotlinVersion)
@@ -30,6 +31,7 @@ pluginManagement {
         id("org.jetbrains.compose").version(composeVersion)
 
         id("com.diffplug.spotless").version(spotlessVersion)
+        id("com.vanniktech.maven.publish").version(publishVersion)
     }
 }
 
