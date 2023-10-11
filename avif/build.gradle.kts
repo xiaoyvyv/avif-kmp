@@ -7,7 +7,9 @@ plugins {
 }
 
 kotlin {
-    androidTarget()
+    androidTarget {
+        publishAllLibraryVariants()
+    }
     jvm()
     iosX64()
     iosArm64()

@@ -6,7 +6,9 @@ plugins {
 }
 
 kotlin {
-    androidTarget()
+    androidTarget {
+        publishAllLibraryVariants()
+    }
     jvm()
     iosX64()
     iosArm64()
@@ -31,6 +33,7 @@ kotlin {
             }
         }
     }
+    jvmToolchain(11)
 }
 
 android {
