@@ -57,7 +57,7 @@ kotlin {
             else -> error("avif not support with target: $name")
         }
 
-        val libraryPath = file("$rootDir/library/darwin/build/ios/$arch")
+        val libraryPath = file("$rootDir/avif/darwin/build/ios/$arch")
         main.cinterops {
             create("avif") {
                 defFile("src/nativeMain/cinterop/avif.def")

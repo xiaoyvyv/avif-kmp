@@ -123,7 +123,7 @@ fun createBuildLibAvifIosTask(target: String) = tasks.creating(Exec::class) {
 }
 
 private val androidExtension: LibraryExtension
-    get() = project(":library").extensions["android"] as LibraryExtension
+    get() = project(":avif").extensions["android"] as LibraryExtension
 
 private val currentOs: OperatingSystem
     get() = OperatingSystem.current()

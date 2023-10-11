@@ -3,8 +3,8 @@ rootProject.name = "avif-kmp"
 include(":androidApp")
 include(":desktopApp")
 include(":shared")
-include(":library")
-include(":library:darwin")
+include(":avif")
+include(":avif:darwin")
 
 pluginManagement {
     repositories {
