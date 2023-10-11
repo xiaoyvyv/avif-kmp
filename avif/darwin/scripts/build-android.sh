@@ -17,8 +17,7 @@ cmake -B "${libyuv_build_dir}" \
     -DANDROID_STL=c++_shared \
     -DANDROID_PLATFORM="android-${ANDROID_MIN_SDK}" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Android \
-    -DBUILD_STATIC_LIBS=ON
+    -DCMAKE_SYSTEM_NAME=Android
 cmake --build "${libyuv_build_dir}"
 
 cd ../..
@@ -40,8 +39,7 @@ cmake -B "${libwebp_build_dir}" \
     -DANDROID_STL=c++_shared \
     -DANDROID_PLATFORM="android-${ANDROID_MIN_SDK}" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Android \
-    -DBUILD_STATIC_LIBS=ON
+    -DCMAKE_SYSTEM_NAME=Android
 cmake --build "${libwebp_build_dir}"
 
 cd ../..
