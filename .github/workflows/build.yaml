@@ -31,8 +31,10 @@ jobs:
           distribution: 'zulu'
           java-version: 20
 
+      - name: install dependencies
+        run: brew install meson
+
       - name: build libavif
-        uses: seanmiddleditch/gha-setup-ninja@master
         run: ./gradlew :avif:darwin:buildLibAvifNative
 
       - name: build libavif-jvm
