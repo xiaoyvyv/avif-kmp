@@ -141,8 +141,6 @@ val buildLibAvifNativeKLib by tasks.creating(Exec::class) {
                 add("-c")
                 add(it)
             }
-        }.also {
-            println(it)
         }
     )
 }
