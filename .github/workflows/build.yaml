@@ -46,7 +46,7 @@ jobs:
       - name: Upload libavif-jvm.klib
         uses: actions/upload-artifact@v3
         with:
-          name: jvm-native-libraries
+          name: jvm-native-${{ matrix.arch }}
           path: avif/src/jvmMain/resources/*
           if-no-files-found: error
 
