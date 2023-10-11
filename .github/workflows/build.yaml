@@ -32,7 +32,7 @@ jobs:
           java-version: 20
 
       - name: Install dependencies
-        run: brew install meson
+        run: brew install meson nasm
 
       - name: Build libavif
         run: ./gradlew :avif:darwin:buildLibAvifNative
