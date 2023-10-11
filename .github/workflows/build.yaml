@@ -22,24 +22,25 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: set up JDK
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: 20
 
-      - name: install dependencies
+      - name: Install dependencies
         run: brew install meson
 
-      - name: build libavif
+      - name: Build libavif
         run: ./gradlew :avif:darwin:buildLibAvifNative
 
-      - name: build libavif-jvm
+      - name: Build libavif-jvm.klb
         run: ./gradlew :avif:buildLibAvifNativeKLib -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
 
+      - name: Upload libavif-jvm.klib
       - uses: actions/upload-artifact@v3
         with:
           name: jvm-native-libraries
