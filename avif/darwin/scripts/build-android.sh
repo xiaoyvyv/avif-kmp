@@ -1,6 +1,5 @@
 cd libavif || exit 255
 
-
 # START libyuv
 if ! [ -f ext/libyuv ]; then
   git clone --single-branch https://chromium.googlesource.com/libyuv/libyuv ext/libyuv
@@ -11,13 +10,7 @@ libyuv_build_dir="build/${ABI}"
 rm -rf "${libyuv_build_dir}"
 mkdir -p "${libyuv_build_dir}"
 
-cmake -B "${libyuv_build_dir}" \
-    -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK}/build/cmake/android.toolchain.cmake" \
-    -DANDROID_ABI="${ABI}" \
-    -DANDROID_STL=c++_shared \
-    -DANDROID_PLATFORM="android-${ANDROID_MIN_SDK}" \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Android
+cmake -B "${libyuv_build_dir}" ${ANDROID_CMAKE_PARAMS}
 cmake --build "${libyuv_build_dir}"
 
 cd ../..
@@ -33,13 +26,7 @@ libwebp_build_dir="build"
 rm -rf "${libwebp_build_dir}"
 mkdir -p "${libwebp_build_dir}"
 
-cmake -B "${libwebp_build_dir}" \
-    -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK}/build/cmake/android.toolchain.cmake" \
-    -DANDROID_ABI="${ABI}" \
-    -DANDROID_STL=c++_shared \
-    -DANDROID_PLATFORM="android-${ANDROID_MIN_SDK}" \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Android
+cmake -B "${libwebp_build_dir}" ${ANDROID_CMAKE_PARAMS}
 cmake --build "${libwebp_build_dir}"
 
 cd ../..
@@ -84,13 +71,7 @@ build_dir="_build-android_${ABI}"
 rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
-cmake -B "${build_dir}" \
-  -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK}/build/cmake/android.toolchain.cmake" \
-  -DANDROID_ABI="${ABI}" \
-  -DANDROID_STL=c++_shared \
-  -DANDROID_PLATFORM="android-${ANDROID_MIN_SDK}" \
-  -DCMAKE_SYSTEM_NAME=Android \
-  -DCMAKE_BUILD_TYPE=Release \
+cmake -B "${build_dir}" ${ANDROID_CMAKE_PARAMS} \
   -DBUILD_SHARED_LIBS=OFF \
   -DAVIF_CODEC_DAV1D=ON \
   -DAVIF_LOCAL_DAV1D=ON \
@@ -102,13 +83,11 @@ cmake --build "${build_dir}"
 # START copy *.a & rm cache dir
 mkdir -p "${ANDROID_OUTPUT_DIR}"
 
-#cp -v ext/libyuv/build/${ABI}/libyuv.a "${ANDROID_OUTPUT_DIR}" || exit 255
-#cp -v ext/libwebp/build/libsharpyuv.a "${ANDROID_OUTPUT_DIR}" || exit 255
 cp -v ext/dav1d/build/${ABI}/src/*.a "${ANDROID_OUTPUT_DIR}" || exit 255
 cp -v ${build_dir}/*.a "${ANDROID_OUTPUT_DIR}" || exit 255
 
-#rm -rf "ext/libyuv/build/${ABI}"
-#rm -rf "ext/libwebp/build"
+rm -rf "ext/libyuv/build/${ABI}"
+rm -rf "ext/libwebp/build"
 rm -rf "ext/dav1d/build/${ABI}"
 rm -rf "${build_dir}"
 # END copy *.a & rm cache dir
