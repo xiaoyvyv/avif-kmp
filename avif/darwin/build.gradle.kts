@@ -11,10 +11,13 @@ val buildLibAvifNative by tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvif.dependsOn(this)
 
+    val outputDir = projectDir.resolve("build/native")
     inputs.files(projectDir.resolve("scripts/build-native.sh"))
-    outputs.dir(projectDir.resolve("build/native"))
+    outputs.dir(outputDir)
 
     workingDir = projectDir
+
+    environment("NATIVE_OUTPUT_DIR", outputDir)
 
     commandLine("bash", "-l", "scripts/build-native.sh")
 }

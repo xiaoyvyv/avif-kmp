@@ -72,12 +72,10 @@ cmake --build "${build_dir}"
 # END avif
 
 # START copy *.a & rm cache dir
-mkdir -p "../build/native"
+mkdir -p "${NATIVE_OUTPUT_DIR}"
 
-cp -v "ext/libyuv/build/libyuv.a" "../build/native" || exit 255
-cp -v "ext/libwebp/build/libsharpyuv.a" "../build/native" || exit 255
-cp -v "ext/dav1d/build/src/libdav1d.a" "../build/native" || exit 255
-cp -v "${build_dir}/libavif.a" "../build/native" || exit 255
+cp -v "ext/dav1d/build/src/libdav1d.a" "${NATIVE_OUTPUT_DIR}" || exit 255
+cp -v "${build_dir}/libavif.a" "${NATIVE_OUTPUT_DIR}" || exit 255
 
 rm -rf "ext/libyuv/build"
 rm -rf "ext/libwebp/build"
