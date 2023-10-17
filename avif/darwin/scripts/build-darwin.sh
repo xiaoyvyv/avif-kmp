@@ -1,5 +1,11 @@
 cd libavif || exit 255
 
+# START libjpeg
+if ! [ -f ext/libjpeg ]; then
+  git clone --depth 1 https://github.com/joedrago/libjpeg.git ext/libjpeg
+fi
+# END libjpeg
+
 # START libyuv
 if ! [ -f ext/libyuv ]; then
   git clone --single-branch https://chromium.googlesource.com/libyuv/libyuv ext/libyuv
@@ -67,6 +73,7 @@ cmake -B "${build_dir}" ${DARWIN_CMAKE_PARAMS} \
   -DBUILD_SHARED_LIBS=OFF \
   -DAVIF_CODEC_DAV1D=ON \
   -DAVIF_LOCAL_DAV1D=ON \
+  -DAVIF_LOCAL_JPEG=ON \
   -DAVIF_LOCAL_LIBYUV=ON \
   -DAVIF_LOCAL_LIBSHARPYUV=ON
 cmake --build "${build_dir}" --config Release
