@@ -14,19 +14,35 @@ val buildLibAvifDarwin by tasks.creating(Exec::class) {
     // TODO: wait to support linux & windows
     onlyIf { currentOs.isMacOsX }
 
+    val host = System.getProperty("os.arch")
+    val target = findProperty("ARCH")
+
     val outputDir = projectDir.resolve("build/darwin")
+    val darwinCrossFile = projectDir.resolve("crossfiles/darwin/$target-apple-darwin.meson")
+
     inputs.files(projectDir.resolve("scripts/build-darwin.sh"))
+    inputs.files(darwinCrossFile)
+    inputs.files(iosCmakeFile)
     outputs.dir(outputDir)
 
     workingDir = projectDir
 
-    val host = System.getProperty("os.arch")
-    val target = findProperty("ARCH")
-
     environment("DARWIN_OUTPUT_DIR", outputDir)
     environment("DARWIN_CMAKE_PARAMS", buildString {
         if (target != null && host != target) {
-            append("-DCMAKE_OSX_ARCHITECTURES=${findProperty("CMAKE-ARCH")}")
+            val platform = when (target) {
+                "aarch64" -> "MAC_ARM64"
+                "x86_64" -> "MAC"
+                else -> ""
+            }
+            append("-DCMAKE_TOOLCHAIN_FILE=${iosCmakeFile}")
+            append(' ')
+            append("-DPLATFORM=${platform}")
+        }
+    })
+    environment("DARWIN_MESON_PARAMS", buildString {
+        if (target != null && host != target) {
+            append("--cross-file=${darwinCrossFile}")
         }
     })
 
