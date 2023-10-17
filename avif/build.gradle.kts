@@ -121,7 +121,7 @@ android {
     ndkVersion = "25.1.8937393"
 }
 
-val buildLibAvifNativeKLib by tasks.creating(Exec::class) {
+val buildLibAvifDarwinKLib by tasks.creating(Exec::class) {
     group = "avif"
 
     inputs.files(projectDir.resolve("build-jvm-klib.sh"))

@@ -38,10 +38,10 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: Build libavif
-        run: ./gradlew :avif:darwin:buildLibAvifNative -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
+        run: ./gradlew :avif:darwin:buildLibAvifDarwin -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
 
       - name: Build libavif-jvm.klb
-        run: ./gradlew :avif:buildLibAvifNativeKLib -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
+        run: ./gradlew :avif:buildLibAvifDarwinKLib -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
 
       - name: Upload libavif-jvm.klib
         uses: actions/upload-artifact@v3

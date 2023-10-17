@@ -7,15 +7,15 @@ val buildLibAvif by tasks.creating {
     group = taskGroup
 }
 
-val buildLibAvifNative by tasks.creating(Exec::class) {
+val buildLibAvifDarwin by tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvif.dependsOn(this)
 
     // TODO: wait to support linux & windows
     onlyIf { currentOs.isMacOsX }
 
-    val outputDir = projectDir.resolve("build/native")
-    inputs.files(projectDir.resolve("scripts/build-native.sh"))
+    val outputDir = projectDir.resolve("build/darwin")
+    inputs.files(projectDir.resolve("scripts/build-darwin.sh"))
     outputs.dir(outputDir)
 
     workingDir = projectDir
@@ -23,14 +23,14 @@ val buildLibAvifNative by tasks.creating(Exec::class) {
     val host = System.getProperty("os.arch")
     val target = findProperty("ARCH")
 
-    environment("NATIVE_OUTPUT_DIR", outputDir)
-    environment("NATIVE_CMAKE_PARAMS", buildString {
+    environment("DARWIN_OUTPUT_DIR", outputDir)
+    environment("DARWIN_CMAKE_PARAMS", buildString {
         if (target != null && host != target) {
             append("-DCMAKE_OSX_ARCHITECTURES=${findProperty("CMAKE-ARCH")}")
         }
     })
 
-    commandLine("bash", "-l", "scripts/build-native.sh")
+    commandLine("bash", "-l", "scripts/build-darwin.sh")
 }
 
 val buildLibAvifAndroid by tasks.creating {

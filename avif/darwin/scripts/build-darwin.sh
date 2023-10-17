@@ -10,7 +10,7 @@ libyuv_build_dir="build"
 rm -rf "${libyuv_build_dir}"
 mkdir -p "${libyuv_build_dir}"
 
-cmake -B "${libyuv_build_dir}" ${NATIVE_CMAKE_PARAMS} \
+cmake -B "${libyuv_build_dir}" ${DARWIN_CMAKE_PARAMS} \
  -DCMAKE_BUILD_TYPE=Release
 cmake --build "${libyuv_build_dir}"
 
@@ -27,7 +27,7 @@ libwebp_build_dir="build"
 rm -rf "${libwebp_build_dir}"
 mkdir -p "${libwebp_build_dir}"
 
-cmake -B "${libwebp_build_dir}" ${NATIVE_CMAKE_PARAMS} \
+cmake -B "${libwebp_build_dir}" ${DARWIN_CMAKE_PARAMS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF
 cmake --build "${libwebp_build_dir}"
@@ -62,7 +62,7 @@ build_dir="_build-native"
 rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
-cmake -B "${build_dir}" ${NATIVE_CMAKE_PARAMS} \
+cmake -B "${build_dir}" ${DARWIN_CMAKE_PARAMS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF \
   -DAVIF_CODEC_DAV1D=ON \
@@ -73,10 +73,10 @@ cmake --build "${build_dir}"
 # END avif
 
 # START copy *.a & rm cache dir
-mkdir -p "${NATIVE_OUTPUT_DIR}"
+mkdir -p "${DARWIN_OUTPUT_DIR}"
 
-cp -v "ext/dav1d/build/src/libdav1d.a" "${NATIVE_OUTPUT_DIR}" || exit 255
-cp -v "${build_dir}/libavif.a" "${NATIVE_OUTPUT_DIR}" || exit 255
+cp -v "ext/dav1d/build/src/libdav1d.a" "${DARWIN_OUTPUT_DIR}" || exit 255
+cp -v "${build_dir}/libavif.a" "${DARWIN_OUTPUT_DIR}" || exit 255
 
 rm -rf "ext/libyuv/build"
 rm -rf "ext/libwebp/build"
