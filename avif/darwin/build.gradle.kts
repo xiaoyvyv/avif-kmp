@@ -126,7 +126,6 @@ fun createBuildLibAvifIosTask(target: String) = tasks.creating(Exec::class) {
 
     val outputDir = projectDir.resolve("build/ios/$arch")
     val iosCrossFile = projectDir.resolve("crossfiles/ios/$iosCrossFileName")
-    val iosCmakeFile = projectDir.resolve("ios.toolchain.cmake")
 
     inputs.files(projectDir.resolve("scripts/build-ios.sh"))
     inputs.files(iosCrossFile)
@@ -136,13 +135,20 @@ fun createBuildLibAvifIosTask(target: String) = tasks.creating(Exec::class) {
     workingDir = projectDir
 
     environment("IOS_CROSS_FILE", iosCrossFile)
-    environment("IOS_TOOLCHAIN_FILE", iosCmakeFile)
-    environment("BUILD_PLATFORM1", iosToolchainPlatform)
     environment("IOS_OUTPUT_DIR", outputDir)
     environment("ARCH", arch)
 
+    environment("IOS_CMAKE_PARAMS", buildString {
+        append("-DCMAKE_TOOLCHAIN_FILE=${iosCmakeFile}")
+        append(' ')
+        append("-DPLATFORM=${iosToolchainPlatform}")
+    })
+
     commandLine("bash", "-l", "scripts/build-ios.sh")
 }
+
+private val iosCmakeFile: File
+    get() = projectDir.resolve("ios.toolchain.cmake")
 
 private val androidExtension: LibraryExtension
     get() = project(":avif").extensions["android"] as LibraryExtension
