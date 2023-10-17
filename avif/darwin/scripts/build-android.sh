@@ -10,7 +10,8 @@ libyuv_build_dir="build/${ABI}"
 rm -rf "${libyuv_build_dir}"
 mkdir -p "${libyuv_build_dir}"
 
-cmake -B "${libyuv_build_dir}" ${ANDROID_CMAKE_PARAMS}
+cmake -B "${libyuv_build_dir}" ${ANDROID_CMAKE_PARAMS} \
+  -DCMAKE_BUILD_TYPE=Release
 cmake --build "${libyuv_build_dir}"
 
 cd ../..
@@ -26,7 +27,8 @@ libwebp_build_dir="build"
 rm -rf "${libwebp_build_dir}"
 mkdir -p "${libwebp_build_dir}"
 
-cmake -B "${libwebp_build_dir}" ${ANDROID_CMAKE_PARAMS}
+cmake -B "${libwebp_build_dir}" ${ANDROID_CMAKE_PARAMS} \
+  -DCMAKE_BUILD_TYPE=Release
 cmake --build "${libwebp_build_dir}"
 
 cd ../..
@@ -72,6 +74,7 @@ rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
 cmake -B "${build_dir}" ${ANDROID_CMAKE_PARAMS} \
+  -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF \
   -DAVIF_CODEC_DAV1D=ON \
   -DAVIF_LOCAL_DAV1D=ON \

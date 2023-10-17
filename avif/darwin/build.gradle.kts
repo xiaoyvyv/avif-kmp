@@ -71,10 +71,6 @@ fun createBuildLibAvifAndroidTask(abi: String) = tasks.creating(Exec::class) {
         append("-DANDROID_PLATFORM=android-${androidExtension.defaultConfig.minSdk ?: 21}")
         append(' ')
         append("-DANDROID_STL=c++_shared")
-        append(' ')
-        append("-DCMAKE_BUILD_TYPE=Release")
-        append(' ')
-        append("-DCMAKE_SYSTEM_NAME=Android")
     })
     environment("ANDROID_OUTPUT_DIR", outputDir)
 
