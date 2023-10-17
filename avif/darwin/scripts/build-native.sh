@@ -6,14 +6,14 @@ if ! [ -f ext/libyuv ]; then
 fi
 cd ext/libyuv || exit 255
 
-rm -rf "build"
-mkdir -p "build"
-cd "build" || exit 255
+libyuv_build_dir="build"
+rm -rf "${libyuv_build_dir}"
+mkdir -p "${libyuv_build_dir}"
 
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
-ninja yuv
+cmake -B "${libyuv_build_dir}" ${NATIVE_CMAKE_PARAMS} \
+ -DCMAKE_BUILD_TYPE=Release
+cmake --build "${libyuv_build_dir}"
 
-cd ..
 cd ../..
 # END libyuv
 
@@ -23,14 +23,15 @@ if ! [ -f ext/libwebp ]; then
 fi
 cd ext/libwebp || exit 255
 
-rm -rf "build"
-mkdir -p "build"
-cd "build" || exit 255
+libwebp_build_dir="build"
+rm -rf "${libwebp_build_dir}"
+mkdir -p "${libwebp_build_dir}"
 
-cmake -G Ninja -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release ..
-ninja sharpyuv
+cmake -B "${libwebp_build_dir}" ${NATIVE_CMAKE_PARAMS} \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DBUILD_SHARED_LIBS=OFF
+cmake --build "${libwebp_build_dir}"
 
-cd ..
 cd ../..
 # END libwebp
 
@@ -61,7 +62,7 @@ build_dir="_build-native"
 rm -rf "${build_dir}"
 mkdir -p "${build_dir}"
 
-cmake -B "${build_dir}" -G Ninja \
+cmake -B "${build_dir}" ${NATIVE_CMAKE_PARAMS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF \
   -DAVIF_CODEC_DAV1D=ON \

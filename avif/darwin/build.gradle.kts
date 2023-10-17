@@ -11,13 +11,24 @@ val buildLibAvifNative by tasks.creating(Exec::class) {
     group = taskGroup
     buildLibAvif.dependsOn(this)
 
+    // TODO: wait to support linux & windows
+    onlyIf { currentOs.isMacOsX }
+
     val outputDir = projectDir.resolve("build/native")
     inputs.files(projectDir.resolve("scripts/build-native.sh"))
     outputs.dir(outputDir)
 
     workingDir = projectDir
 
+    val host = System.getProperty("os.arch")
+    val target = findProperty("ARCH")
+
     environment("NATIVE_OUTPUT_DIR", outputDir)
+    environment("NATIVE_CMAKE_PARAMS", buildString {
+        if (target != null && host != target) {
+            append("-DCMAKE_OSX_ARCHITECTURES=${findProperty("CMAKE-ARCH")}")
+        }
+    })
 
     commandLine("bash", "-l", "scripts/build-native.sh")
 }
