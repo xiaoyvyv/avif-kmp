@@ -30,6 +30,8 @@ if ! [ -f ext/libwebp ]; then
 fi
 cd ext/libwebp || exit 255
 
+git checkout e2c85878f6a33f29948b43d3492d9cdaf801aa54
+
 libwebp_build_dir="build"
 rm -rf "${libwebp_build_dir}"
 mkdir -p "${libwebp_build_dir}"
