@@ -40,9 +40,9 @@ if ! [ -f ext/dav1d ]; then
 fi
 cd ext/dav1d || exit 255
 
-rm -rf "build/${ABI}"
-mkdir -p "build/${ABI}"
-cd "build/${ABI}" || exit 255
+dav1d_build_dir="build/${ABI}"
+rm -rf "${dav1d_build_dir}"
+mkdir -p "${dav1d_build_dir}"
 
 android_toolchain="${ANDROID_NDK}/toolchains/llvm/prebuilt/${TOOLCHAIN}"
 android_bin="${android_toolchain}/bin"
@@ -51,20 +51,18 @@ echo "build android abi: ${ABI}"
 echo "android_toolchain: ${android_toolchain}"
 echo "android_cross_file: ${ANDROID_CROSS_FILE}"
 
-PATH=$PATH:${android_bin} meson setup \
+PATH=$PATH:${android_bin} meson setup "${dav1d_build_dir}" \
+  --cross-file="${ANDROID_CROSS_FILE}" \
   --default-library=static \
   --buildtype=release \
-  --cross-file="${ANDROID_CROSS_FILE}" \
   -Db_lto=false \
   -Db_ndebug=false \
   -Denable_asm=false \
   -Denable_tools=false \
   -Denable_examples=false \
-  -Denable_tests=false \
-  ../..
-PATH=$PATH:${android_bin} ninja
+  -Denable_tests=false
+PATH=$PATH:${android_bin} ninja -C "${dav1d_build_dir}"
 
-cd ../..
 cd ../..
 # END dav1d
 
