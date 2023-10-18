@@ -16,9 +16,10 @@ libyuv_build_dir="build"
 rm -rf "${libyuv_build_dir}"
 mkdir -p "${libyuv_build_dir}"
 
-cmake -B "${libyuv_build_dir}" ${DARWIN_CMAKE_PARAMS} \
- -DCMAKE_BUILD_TYPE=Release
-cmake --build "${libyuv_build_dir}"
+cmake -B "${libyuv_build_dir}" -G Ninja ${DARWIN_CMAKE_PARAMS} \
+ -DCMAKE_BUILD_TYPE=Release \
+ -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ninja yuv -C "${libyuv_build_dir}"
 
 cd ../..
 # END libyuv
@@ -33,10 +34,10 @@ libwebp_build_dir="build"
 rm -rf "${libwebp_build_dir}"
 mkdir -p "${libwebp_build_dir}"
 
-cmake -B "${libwebp_build_dir}" ${DARWIN_CMAKE_PARAMS} \
+cmake -B "${libwebp_build_dir}" -G Ninja ${DARWIN_CMAKE_PARAMS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF
-cmake --build "${libwebp_build_dir}"
+ninja sharpyuv -C "${libwebp_build_dir}"
 
 cd ../..
 # END libwebp
@@ -47,19 +48,17 @@ if ! [ -f ext/dav1d ]; then
 fi
 cd ext/dav1d || exit 255
 
-rm -rf "build"
-mkdir -p "build"
-cd "build" || exit 255
+dav1d_build_dir="build"
+rm -rf "${dav1d_build_dir}"
+mkdir -p "${dav1d_build_dir}"
 
-meson setup ${DARWIN_MESON_PARAMS} \
+meson setup "${dav1d_build_dir}" ${DARWIN_MESON_PARAMS} \
   --default-library=static \
   --buildtype release \
   -Denable_tools=false \
-  -Denable_tests=false \
-  ..
-ninja
+  -Denable_tests=false
+ninja -C "${dav1d_build_dir}"
 
-cd ..
 cd ../..
 # END dav1d
 
