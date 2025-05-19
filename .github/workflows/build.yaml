@@ -10,9 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #          - os: ubuntu-latest
-          #            arch: amd64
-          #            cmake-arch: x86_64
           - os: macOS-latest
             arch: x86_64
             cmake-arch: x86_64
@@ -44,7 +41,7 @@ jobs:
         run: ./gradlew :avif:buildLibAvifDarwinKLib -PARCH=${{ matrix.arch }} -PCMAKE-ARCH=${{ matrix.cmake-arch }}
 
       - name: Upload libavif-jvm.klib
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jvm-native-${{ matrix.arch }}
           path: avif/src/jvmMain/resources/*
